@@ -66,6 +66,49 @@ export interface Database {
       }
 
       // =====================================================
+      // DRUG MASTER
+      // =====================================================
+      drug_master: {
+        Row: {
+          id: string
+          drug_name: string
+          generic_name: string | null
+          drug_code: string
+          composition: string
+          strength: string
+          dosage_form: string
+          approved_expiry_months: number
+          approved_manufacturer_ids: string[]
+          composition_hash: string
+          blockchain_tx_hash: string | null
+          blockchain_block: number | null
+          approved_by: string | null
+          approved_by_org: string | null
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          drug_name: string
+          generic_name?: string | null
+          drug_code: string
+          composition: string
+          strength: string
+          dosage_form: string
+          approved_expiry_months: number
+          approved_manufacturer_ids?: string[]
+          composition_hash: string
+          blockchain_tx_hash?: string | null
+          blockchain_block?: number | null
+          approved_by?: string | null
+          approved_by_org?: string | null
+          is_active?: boolean
+        }
+        Update: Partial<Database['public']['Tables']['drug_master']['Insert']>
+      }
+
+      // =====================================================
       // STAKEHOLDERS
       // =====================================================
       stakeholders: {
@@ -180,6 +223,10 @@ export interface Database {
           on_chain_batch_id: number | null
           current_holder: string | null
           is_blockchain_synced: boolean
+          drug_master_id: string | null
+          composition_hash: string | null
+          composition: string | null
+          strength: string | null
           created_at: string
           updated_at: string
         }
@@ -201,6 +248,10 @@ export interface Database {
           on_chain_batch_id?: number | null
           current_holder?: string | null
           is_blockchain_synced?: boolean
+          drug_master_id?: string | null
+          composition_hash?: string | null
+          composition?: string | null
+          strength?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -222,6 +273,10 @@ export interface Database {
           on_chain_batch_id?: number | null
           current_holder?: string | null
           is_blockchain_synced?: boolean
+          drug_master_id?: string | null
+          composition_hash?: string | null
+          composition?: string | null
+          strength?: string | null
           created_at?: string
           updated_at?: string
         }

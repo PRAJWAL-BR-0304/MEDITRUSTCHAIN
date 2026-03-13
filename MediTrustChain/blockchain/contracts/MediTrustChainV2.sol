@@ -99,14 +99,33 @@ contract MediTrustChainV2 is Ownable, Pausable {
         uint256 registeredAt;
     }
 
+    /// ============ Drug Master / Regulator Template ============
+
+    struct DrugTemplate {
+        uint256 id;
+        string drugCode;           // e.g., "DRG-001"
+        string drugName;
+        string composition;
+        string strength;
+        bytes32 compositionHash;   // keccak256(drugName + composition + strength)
+        address approvedBy;        // regulator wallet
+        uint256 approvedAt;
+        bool isActive;
+    }
+
     /// ============ State Variables ============
 
-    uint256 private batchIdCounter = 0;
+    uint256 private batchIdCounter = 1;
+    uint256 private drugTemplateCounter = 0;
 
     // Core and State are stored separately for clarity and gas optimization
     mapping(uint256 => BatchCore) public batchCores;
     mapping(uint256 => BatchState) public batchStates;
     mapping(uint256 => BatchHistory[]) public batchHistories;
+    
+    mapping(uint256 => DrugTemplate) public drugTemplates;
+    mapping(string => uint256) public drugCodeToTemplateId;   // drugCode → templateId
+    mapping(bytes32 => bool) public approvedCompositionHashes; // quick lookup
     
     mapping(address => User) public users;
     mapping(address => bool) public approvedRegulatorsMap;
@@ -115,6 +134,14 @@ contract MediTrustChainV2 is Ownable, Pausable {
     address[] public approvedRegulators;
 
     /// ============ Events ============
+
+    event DrugTemplateCreated(
+        uint256 indexed templateId,
+        string indexed drugCode,
+        string drugName,
+        bytes32 compositionHash,
+        address indexed approvedBy
+    );
 
     event BatchCreated(
         uint256 indexed batchId,
@@ -280,6 +307,49 @@ contract MediTrustChainV2 is Ownable, Pausable {
         return approvedRegulators;
     }
 
+    /// ============ Drug Master Management ============
+
+    /**
+     * @dev Regulator locks an official drug composition
+     * @param drugCode  Unique identifier e.g. "DRG-001"
+     * @param drugName  Official name
+     * @param composition  Approved ingredients
+     * @param strength  Dosage strength
+     */
+    function approveDrugTemplate(
+        string calldata drugCode,
+        string calldata drugName,
+        string calldata composition,
+        string calldata strength
+    ) external whenNotPaused returns (uint256) {
+        User memory caller = users[msg.sender];
+        require(caller.isActive, "User not registered");
+        require(caller.role == UserRole.REGULATOR, "Only regulators can approve drug templates");
+        require(approvedRegulatorsMap[msg.sender], "Only approved regulators can call this function");
+        require(drugCodeToTemplateId[drugCode] == 0, "Drug code already exists");
+
+        bytes32 compHash = keccak256(abi.encodePacked(drugName, composition, strength));
+
+        drugTemplateCounter++;
+        drugTemplates[drugTemplateCounter] = DrugTemplate({
+            id:              drugTemplateCounter,
+            drugCode:        drugCode,
+            drugName:        drugName,
+            composition:     composition,
+            strength:        strength,
+            compositionHash: compHash,
+            approvedBy:      msg.sender,
+            approvedAt:      block.timestamp,
+            isActive:        true
+        });
+
+        drugCodeToTemplateId[drugCode]          = drugTemplateCounter;
+        approvedCompositionHashes[compHash]     = true;
+
+        emit DrugTemplateCreated(drugTemplateCounter, drugCode, drugName, compHash, msg.sender);
+        return drugTemplateCounter;
+    }
+
     /// ============ Batch Management ============
 
     /**
@@ -291,7 +361,8 @@ contract MediTrustChainV2 is Ownable, Pausable {
         string memory _drugName,
         uint256 _quantity,
         uint256 _mfgDate,
-        uint256 _expDate
+        uint256 _expDate,
+        uint256 _drugTemplateId
     ) 
         public 
         onlyManufacturer 
@@ -303,6 +374,15 @@ contract MediTrustChainV2 is Ownable, Pausable {
         require(bytes(_batchCode).length > 0, "Batch code cannot be empty");
         require(batchCodeToBatchId[_batchCode] == 0, "Batch code already exists");
 
+        // Verify drug template exists and is active
+        DrugTemplate storage template = drugTemplates[_drugTemplateId];
+        require(template.id != 0,    "Drug template not found");
+        require(template.isActive,   "Drug template is inactive");
+
+        // Verify composition hash matches the approved template
+        bytes32 expectedHash = template.compositionHash;
+        require(approvedCompositionHashes[expectedHash], "Composition not approved by regulator");
+
         uint256 newBatchId = batchIdCounter;
         batchIdCounter++;
 
@@ -313,7 +393,8 @@ contract MediTrustChainV2 is Ownable, Pausable {
             _quantity,
             _mfgDate,
             _expDate,
-            msg.sender  // manufacturer address
+            msg.sender,  // manufacturer address
+            _drugTemplateId // binds batch to approved template
         ));
 
         // Store immutable core data

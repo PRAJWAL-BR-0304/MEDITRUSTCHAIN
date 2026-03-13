@@ -8,13 +8,13 @@
 -- =====================================================
 
 -- Update batches status CHECK constraint
-ALTER TABLE batches DROP CONSTRAINT batches_status_check;
+ALTER TABLE batches DROP CONSTRAINT IF EXISTS batches_status_check;
 
 ALTER TABLE batches ADD CONSTRAINT batches_status_check 
     CHECK (status IN ('Pending', 'Approved', 'Rejected', 'In-Transit', 'At-Pharmacy', 'Sold', 'Expired', 'Recalled'));
 
 -- Update batch_history status CHECK constraint  
-ALTER TABLE batch_history DROP CONSTRAINT batch_history_status_check;
+ALTER TABLE batch_history DROP CONSTRAINT IF EXISTS batch_history_status_check;
 
 ALTER TABLE batch_history ADD CONSTRAINT batch_history_status_check
     CHECK (status IN ('Pending', 'Approved', 'Rejected', 'In-Transit', 'At-Pharmacy', 'Sold', 'Expired', 'Recalled'));

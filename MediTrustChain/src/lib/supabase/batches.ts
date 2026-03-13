@@ -3,9 +3,7 @@ import type { Batch, BatchHistoryEvent, BatchStatus } from '@/contexts/batches-c
 import type { Database } from '@/types/database.types';
 import { validateOrganizationAccess } from '@/lib/cbac/access-control';
 
-// Client is now instantiated inside functions to ensure fresh auth state
-
-
+export type DashboardType = "MANUFACTURER" | "REGULATOR" | "DISTRIBUTOR" | "LOGISTICS" | "PHARMACY" | "SUPPLY CHAIN";
 type DbBatch = Database['public']['Tables']['batches']['Row'];
 type DbHistory = Database['public']['Tables']['batch_history']['Row'];
 
@@ -53,6 +51,13 @@ function mapFromDb(dbBatch: DbBatch, dbHistory: DbHistory[] = []): Batch {
         organization_id: dbBatch.organization_id || undefined, // Include for validation
         anomalyReason: dbBatch.anomaly_reason || undefined,
         dataHash: dbBatch.data_hash || undefined,
+        blockchain_tx_hash: dbBatch.blockchain_tx_hash || undefined,
+        on_chain_batch_id: dbBatch.on_chain_batch_id || undefined,
+        is_blockchain_synced: dbBatch.is_blockchain_synced || false,
+        drug_master_id: dbBatch.drug_master_id || undefined,
+        composition_hash: dbBatch.composition_hash || undefined,
+        composition: dbBatch.composition || undefined,
+        strength: dbBatch.strength || undefined,
         history: dbHistory
             .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
             .map(h => ({
@@ -184,12 +189,19 @@ export async function upsertBatch(batch: Partial<Batch> & { id: string }, userId
             mfg: batch.mfg!,
             exp: batch.exp!,
             qty: batch.qty!,
-            status: batch.status!,
+            status: batch.status as any,
             manufacturer: batch.manufacturer,
             manufacturer_id: userId,
             organization_id: batch.organization_id,
             anomaly_reason: batch.anomalyReason,
             data_hash: batch.dataHash,
+            blockchain_tx_hash: batch.blockchain_tx_hash,
+            on_chain_batch_id: batch.on_chain_batch_id,
+            is_blockchain_synced: batch.is_blockchain_synced || (!!batch.blockchain_tx_hash),
+            drug_master_id: batch.drug_master_id,
+            composition_hash: batch.composition_hash,
+            composition: batch.composition,
+            strength: batch.strength,
         };
 
         console.log("📝 Attempting to insert batch with data:", JSON.stringify(dbData, null, 2));
@@ -298,7 +310,7 @@ export async function upsertBatch(batch: Partial<Batch> & { id: string }, userId
         mfg: batch.mfg!,
         exp: batch.exp!,
         qty: batch.qty!,
-        status: batch.status!,
+        status: batch.status as any,
         manufacturer: batch.manufacturer,
         manufacturer_id: userId,
         organization_id: organizationId,
@@ -330,15 +342,15 @@ export async function updateBatchStatusInDb(
     batchId: string,
     status: string,
     location?: string,
-    anomalyReason?: string
+    anomalyReason?: string,
+    userId?: string,
+    dashboardArg: DashboardType = "SUPPLY CHAIN",
+    txHash?: string,
+    accessToken?: string
 ) {
+    const originDashboard = dashboardArg;
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-        throw new Error('Not authenticated');
-    }
-
+    
     // Determine dashboard based on status change
     const getDashboard = (status: string): string => {
         switch (status) {
@@ -358,7 +370,7 @@ export async function updateBatchStatusInDb(
         }
     };
 
-    const dashboard = getDashboard(status);
+    const effectiveDashboard = getDashboard(status);
 
     // Update only the status field - don't change organization_id
     const updateData: Record<string, any> = {
@@ -369,7 +381,43 @@ export async function updateBatchStatusInDb(
         updateData.anomaly_reason = anomalyReason;
     }
 
-    // Create AbortController for timeout
+    if (txHash) {
+        updateData.blockchain_tx_hash = txHash;
+        updateData.is_blockchain_synced = true;
+    }
+
+    // BYPASS: Use raw fetch if accessToken is provided for high reliability
+    if (accessToken) {
+        console.log(`🚀 [BYPASS] Updating status to ${status} via raw fetch...`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/batches?id=eq.${batchId}`, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(updateData),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+                const results = await response.json();
+                logDbOperation(originDashboard, `STATUS → ${status} (BYPASS)`, "batches", batchId, true);
+                return Array.isArray(results) ? results[0] : results;
+            }
+            console.error("❌ BYPASS Update failed:", await response.text());
+        } catch (e) {
+            console.error("❌ BYPASS Exception:", e);
+        }
+    }
+
+    // Fallback to standard client
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
@@ -382,20 +430,21 @@ export async function updateBatchStatusInDb(
     clearTimeout(timeoutId);
 
     if (error) {
-        logDbOperation(dashboard, `STATUS → ${status}`, "batches", batchId, false, error.message);
+        logDbOperation(originDashboard, `STATUS → ${status}`, "batches", batchId, false, error.message);
         throw error;
     }
 
     const updatedBatch = data?.[0];
-    logDbOperation(dashboard, `STATUS → ${status}`, "batches", batchId, true);
+    logDbOperation(originDashboard, `STATUS → ${status}`, "batches", batchId, true);
     return updatedBatch;
 }
 
 /**
  * Adds a history event to Supabase
  */
-export async function addBatchHistory(batchId: string, event: BatchHistoryEvent, userId?: string) {
+export async function addBatchHistory(batchId: string, event: BatchHistoryEvent, userId?: string, accessToken?: string) {
     const supabase = createClient();
+
     const dbData: Database['public']['Tables']['batch_history']['Insert'] = {
         batch_id: batchId,
         location: event.location,
@@ -403,6 +452,37 @@ export async function addBatchHistory(batchId: string, event: BatchHistoryEvent,
         timestamp: event.timestamp,
         updated_by: userId,
     };
+
+    // BYPASS: Use raw fetch if accessToken is provided
+    if (accessToken) {
+        console.log(`🚀 [BYPASS] Logging history for ${batchId} via raw fetch...`);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/batch_history`, {
+                method: 'POST',
+                headers: {
+                    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(dbData),
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+                console.log(`📜 [BYPASS] HISTORY SUCCESS: ${batchId} → ${event.status}`);
+                const results = await response.json();
+                return Array.isArray(results) ? results[0] : results;
+            }
+            console.error("❌ BYPASS History failed:", await response.text());
+        } catch (e) {
+            console.error("❌ BYPASS History Exception:", e);
+        }
+    }
 
     // Create AbortController for timeout
     const controller = new AbortController();

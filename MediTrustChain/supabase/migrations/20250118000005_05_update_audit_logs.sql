@@ -22,6 +22,7 @@ BEGIN
         DROP POLICY IF EXISTS "Admins can read all audit logs" ON audit_logs;
         DROP POLICY IF EXISTS "Users can read their own audit logs" ON audit_logs;
         DROP POLICY IF EXISTS "Users can read audit logs" ON audit_logs;
+        DROP POLICY IF EXISTS "Stakeholders can read org audit logs" ON audit_logs;
         
         -- Admins can see all audit logs
         CREATE POLICY "Admins can read all audit logs" ON audit_logs

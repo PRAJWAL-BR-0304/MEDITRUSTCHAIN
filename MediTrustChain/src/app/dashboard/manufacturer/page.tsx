@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, PlusCircle, QrCode, Loader2, Link as LinkIcon, Wallet } from "lucide-react";
+import { CalendarIcon, PlusCircle, QrCode, Loader2, Link as LinkIcon, Wallet, ShieldCheck } from "lucide-react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -31,10 +31,12 @@ import { BlockchainProof } from "@/components/dashboard/blockchain-proof";
 import { ClearDataButton } from "@/components/dashboard/clear-data-button";
 import { BlockchainRegistration } from "@/components/dashboard/blockchain-registration";
 import { UserRole } from "@/lib/blockchain";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DrugMaster } from "@/types/drug-master";
 
 const batchSchema = z.object({
   batchId: z.string().min(1, "Batch ID is required"),
-  drugName: z.string().min(1, "Drug name is required"),
+  drugTemplateId: z.string().min(1, "Drug template must be selected"), // NEW
   mfgDate: z.date({ required_error: "Manufacturing date is required." }),
   expDate: z.date({ required_error: "Expiry date is required." }),
   quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
@@ -47,7 +49,9 @@ export default function ManufacturerDashboard() {
   const { toast } = useToast();
   const [newlyCreatedBatch, setNewlyCreatedBatch] = useState<Batch | null>(null);
   const [blockchainTxHash, setBlockchainTxHash] = useState<string | null>(null);
-  const [blockchainDataHash, setBlockchainDataHash] = useState<string | null>(null); // V2: Store on-chain hash
+  const [blockchainDataHash, setBlockchainDataHash] = useState<string | null>(null);
+  const [drugTemplates, setDrugTemplates] = useState<DrugMaster[]>([]); // NEW
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(true); // NEW
 
   // Merge newlyCreatedBatch with batches for immediate display
   // This shows the batch in the table immediately after blockchain success
@@ -81,11 +85,30 @@ export default function ManufacturerDashboard() {
     ? `Wrong wallet connected. Expected: ${stakeholder.wallet_address.slice(0, 6)}...${stakeholder.wallet_address.slice(-4)}`
     : null;
 
+  // Fetch approved drug templates
+  React.useEffect(() => {
+    async function fetchTemplates() {
+      setIsLoadingTemplates(true);
+      try {
+        const res = await fetch('/api/drug-master');
+        if (res.ok) {
+          const data = await res.json();
+          setDrugTemplates(data.drugs || []);
+        }
+      } catch (err) {
+        console.error('Failed to fetch drug templates:', err);
+      } finally {
+        setIsLoadingTemplates(false);
+      }
+    }
+    fetchTemplates();
+  }, []);
+
   const form = useForm<BatchFormValues>({
     resolver: zodResolver(batchSchema),
     defaultValues: {
       batchId: "",
-      drugName: "",
+      drugTemplateId: "",
       quantity: 0,
     },
   });
@@ -114,8 +137,12 @@ export default function ManufacturerDashboard() {
       }
       handleBlockchainSubmit(data);
     } else {
-      // Fallback to local storage only
-      handleLocalSubmit(data);
+      // Must use blockchain for new regulatory flow
+      toast({
+        variant: "destructive",
+        title: "Blockchain Required",
+        description: "Batch creation now requires an active blockchain connection for regulatory compliance.",
+      });
     }
   }
 
@@ -123,15 +150,38 @@ export default function ManufacturerDashboard() {
     setIsBlockchainSubmitting(true);
     setBlockchainTxHash(null);
 
+    const selectedTemplate = drugTemplates.find(t => t.id === data.drugTemplateId);
+    if (!selectedTemplate) {
+      toast({ variant: "destructive", title: "Error", description: "Selected drug template not found." });
+      setIsBlockchainSubmitting(false);
+      return;
+    }
+
     try {
-      // Step 1: Create batch on blockchain
+      // 1. Verify hash matching API Call First (pre-flight check)
+      console.log('🔍 Pre-flight hash verification...');
+      const verifyRes = await fetch('/api/drug-master/verify-hash', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({
+            drug_master_id: selectedTemplate.id,
+            composition_hash: selectedTemplate.composition_hash
+         })
+      });
+      const verifyData = await verifyRes.json();
+      if (!verifyData.valid) {
+         throw new Error(`Regulatory verification failed: ${verifyData.reason}`);
+      }
+
+      // 2. Create batch on blockchain
       console.log("🔗 Creating batch on blockchain...");
       const result = await createBlockchainBatch({
         batchCode: data.batchId,
-        drugName: data.drugName,
+        drugName: selectedTemplate.drug_name,
         quantity: data.quantity,
         mfgDate: data.mfgDate,
         expDate: data.expDate,
+        drugTemplateId: 1 // Placeholder; full on-chain mapping via drug_code lookup can be added post-MVP
       });
 
       if (result.success) {
@@ -184,13 +234,20 @@ export default function ManufacturerDashboard() {
         
         const newBatchData: Omit<Batch, "status" | "history"> = {
           id: data.batchId,
-          name: data.drugName,
+          name: selectedTemplate.drug_name,
           mfg: format(data.mfgDate, "yyyy-MM-dd"),
           exp: format(data.expDate, "yyyy-MM-dd"),
           qty: data.quantity,
           manufacturer: organization?.name || "Unknown Manufacturer",
           organization_id: organization?.id,
           dataHash: onChainDataHash || undefined,
+          blockchain_tx_hash: result.hash || undefined,
+          on_chain_batch_id: actualBatchId || undefined,
+          is_blockchain_synced: !!result.hash,
+          drug_master_id: selectedTemplate.id, // NEW
+          composition_hash: selectedTemplate.composition_hash, // NEW
+          composition: selectedTemplate.composition, // NEW
+          strength: selectedTemplate.strength, // NEW
         };
 
         // DEBUG: Log the batch data being saved
@@ -234,13 +291,17 @@ export default function ManufacturerDashboard() {
           // Still show QR with blockchain-only data (batch is on blockchain)
           const blockchainOnlyBatch: Batch = {
             id: data.batchId,
-            name: data.drugName,
+            name: selectedTemplate.drug_name,
             mfg: format(data.mfgDate, "yyyy-MM-dd"),
             exp: format(data.expDate, "yyyy-MM-dd"),
             qty: data.quantity,
             manufacturer: organization?.name || "Unknown Manufacturer",
             organization_id: organization?.id,
             dataHash: onChainDataHash || undefined,
+            drug_master_id: selectedTemplate.id, // NEW
+            composition_hash: selectedTemplate.composition_hash, // NEW
+            composition: selectedTemplate.composition, // NEW
+            strength: selectedTemplate.strength, // NEW
             status: "Pending",
             history: [{
               location: organization?.name || "Unknown Manufacturer",
@@ -254,7 +315,6 @@ export default function ManufacturerDashboard() {
           setIsFormLocked(true);
           return; // Exit early - user should retry
         }
-
         // SUCCESS: Both blockchain and database saved
         setNewlyCreatedBatch(savedBatch);
         setBlockchainTxHash(result.hash || null);
@@ -283,37 +343,6 @@ export default function ManufacturerDashboard() {
       // CRITICAL: Always reset loading state
       console.log("🔄 Resetting loading state");
       setIsBlockchainSubmitting(false);
-    }
-  }
-
-  async function handleLocalSubmit(data: BatchFormValues) {
-    const newBatchData: Omit<Batch, "status" | "history"> = {
-      id: data.batchId,
-      name: data.drugName,
-      mfg: format(data.mfgDate, "yyyy-MM-dd"),
-      exp: format(data.expDate, "yyyy-MM-dd"),
-      qty: data.quantity,
-      manufacturer: organization?.name || "Unknown Manufacturer",
-      organization_id: organization?.id,
-    };
-
-    try {
-      const savedBatch = await addBatch(newBatchData);
-      setNewlyCreatedBatch(savedBatch);
-      setBlockchainTxHash(null);
-      setIsFormLocked(true);
-
-      toast({
-        title: "Success!",
-        description: "Batch saved to database successfully.",
-      });
-    } catch (error) {
-      console.error("❌ Database save failed:", error);
-      toast({
-        variant: "destructive",
-        title: "Database Save Failed",
-        description: error instanceof Error ? error.message : "Failed to save batch",
-      });
     }
   }
 
@@ -494,13 +523,35 @@ export default function ManufacturerDashboard() {
                   />
                   <FormField
                     control={form.control}
-                    name="drugName"
+                    name="drugTemplateId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Drug Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Atorvastatin 10mg" {...field} disabled={isFormLocked} />
-                        </FormControl>
+                        <FormLabel>Approved Drug Template</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isFormLocked || isLoadingTemplates}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={isLoadingTemplates ? "Loading templates..." : "Select an approved drug template"} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {drugTemplates.map(template => (
+                              <SelectItem key={template.id} value={template.id}>
+                                {template.drug_name} ({template.strength}) - {template.drug_code}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        {field.value && (
+                          <div className="mt-2 p-3 bg-muted/30 rounded border text-xs text-muted-foreground flex items-start gap-2">
+                             <ShieldCheck className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                             <div>
+                               <p className="font-medium text-foreground mb-1">Regulatory Assured Composition</p>
+                               <p className="truncate max-w-[300px]" title={drugTemplates.find(t => t.id === field.value)?.composition}>
+                                  {drugTemplates.find(t => t.id === field.value)?.composition}
+                               </p>
+                             </div>
+                          </div>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}

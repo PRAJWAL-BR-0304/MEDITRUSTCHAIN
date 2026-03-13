@@ -59,7 +59,11 @@ export function BatchJourney({ batch }: { batch: Batch }) {
                         <div>
                             <CardTitle>Current Status: {batch.status}</CardTitle>
                             <CardDescription>
-                                Last update at {lastEvent.location} on {format(parseISO(lastEvent.timestamp), "MMM d, yyyy 'at' h:mm a")}
+                                {lastEvent ? (
+                                    <>Last update at {lastEvent.location} on {format(parseISO(lastEvent.timestamp), "MMM d, yyyy 'at' h:mm a")}</>
+                                ) : (
+                                    <>No history available for this batch.</>
+                                )}
                             </CardDescription>
                         </div>
                     </div>

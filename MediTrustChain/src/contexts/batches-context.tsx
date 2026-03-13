@@ -14,7 +14,7 @@ import { getUserIdentity } from "@/lib/cbac/access-control";
 
 // Batch status type matching V2 strict state machine:
 // Pending → Approved → In-Transit → At-Pharmacy → Sold
-export type BatchStatus = "Pending" | "Approved" | "Rejected" | "In-Transit" | "At-Pharmacy" | "Sold" | "Expired" | "Recalled";
+export type BatchStatus = "Pending" | "Approved" | "Rejected" | "In-Transit" | "At-Pharmacy" | "Sold" | "Expired" | "Recalled" | "Flagged" | "Delivered" | "Blocked";
 
 export type BatchHistoryEvent = {
   location: string;
@@ -34,8 +34,16 @@ export type Batch = {
   history: BatchHistoryEvent[];
   anomalyReason?: string;
   // V2: On-chain data hash computed at creation (IMMUTABLE)
-  // This is the hash returned from the blockchain createBatch transaction
   dataHash?: string;
+  // Blockchain sync fields
+  blockchain_tx_hash?: string;
+  on_chain_batch_id?: number;
+  is_blockchain_synced?: boolean;
+  // Drug Master fields (from regulator-approved template)
+  drug_master_id?: string;
+  composition_hash?: string;
+  composition?: string;
+  strength?: string;
 };
 
 const initialBatches: Batch[] = [];
@@ -108,9 +116,8 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error("Failed to load batches:", error);
         notifications.addNotification({
-          type: "error",
-          message: "Failed to load batches from database",
-          duration: 5000,
+          title: "Load Error",
+          description: "Failed to load batches from database",
         });
       } finally {
         setIsLoading(false);
@@ -201,7 +208,7 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
       };
     } else {
       console.log("⚠️ Metadata missing, fetching identity from DB (slow path)...");
-      userIdentity = await getUserIdentity(user.id);
+      userIdentity = await getUserIdentity();
     }
 
     // STRICT Security Check: Ensure user belongs to the organization they are creating for
@@ -229,16 +236,14 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
       history: [historyEvent]
     };
 
+    // OPTIMIZATION: Use session from context (synchronous) instead of getSession() (async/hanging)
+    const token = session?.access_token;
+    if (!token) console.warn("⚠️ No access token found in session context, upsertBatch might fail");
+
     console.log("✅ New batch object created:", newBatch);
 
     // 1. CRITICAL: Persist to Supabase FIRST (blocking) — this is the source of truth
     try {
-      // Get current session token to bypass auth client hang in batches.ts
-      // OPTIMIZATION: Use session from context (synchronous) instead of getSession() (async/hanging)
-      const token = session?.access_token;
-
-      if (!token) console.warn("⚠️ No access token found in session context, upsertBatch might fail");
-
       await upsertBatch(newBatch, user.id, token);
       console.log("✅ Batch saved to database with organization_id:", organizationId);
     } catch (error) {
@@ -260,30 +265,39 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
       // Log audit action
       logBatchAction(
         user.id,
-        "CREATE_BATCH",
+        user.email || '',
+        userIdentity.role || '',
         newBatch.id,
-        { ...newBatch, organization_id: organizationId },
-        "SUCCESS"
+        'create',
+        true,
+        { organization_id: organizationId, accessToken: token }
       ).catch(err => console.warn("Background audit log failed:", err));
 
       // 4. Verify AI compliance checks (async)
-      checkForAnomalies(newBatch).then(anomalies => {
+      checkForAnomalies({ batch: newBatch }).then(result => {
+        const anomalies = result.anomalies;
         if (anomalies.length > 0) {
           console.warn(`⚠️ ${anomalies.length} anomalies detected for batch ${newBatch.id}`);
 
           // Save anomalies to database
-          anomalies.forEach(anomaly => {
+          anomalies.forEach((anomaly: any) => {
             saveAnomaly({
-              batch_id: newBatch.id,
+              batchId: newBatch.id,
               severity: anomaly.severity,
               description: anomaly.description,
-              detected_at: new Date().toISOString(),
+              detectedAt: new Date().toISOString(),
               is_resolved: false
-            }).catch(e => console.error("Failed to save anomaly:", e));
+            } as any, token).catch((e: any) => console.error("Failed to save anomaly:", e));
           });
 
           // Notify regulators if needed
-          notifyRegulators(newBatch.id, anomalies).catch(e =>
+          notifyRegulators(
+            `Anomaly Detected: Batch ${newBatch.id}`,
+            `${anomalies.length} anomalies found. Highest severity: ${anomalies[0]?.severity}`,
+            newBatch.id,
+            undefined,
+            token
+          ).catch((e: any) =>
             console.error("Failed to notify regulators:", e)
           );
         }
@@ -300,7 +314,8 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
     batchId: string,
     status: BatchStatus,
     location: string = "Unknown Location",
-    anomalyReason?: string
+    anomalyReason?: string,
+    txnHash?: string
   ) => {
     if (!user) throw new Error("User must be logged in to update batch status");
 
@@ -319,27 +334,38 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
             ...batch,
             status,
             history: [...batch.history, historyEvent],
-            anomalyReason
+            anomalyReason,
+            blockchain_tx_hash: txnHash || batch.blockchain_tx_hash,
+            is_blockchain_synced: txnHash ? true : batch.is_blockchain_synced
           }
           : batch
       )
     );
 
     try {
-      // 1. Update status in DB (using unrestricted function for supply chain)
-      await updateBatchStatusInDb(batchId, status, location, anomalyReason);
-
-      // 2. Add history record
-      await addBatchHistory(batchId, historyEvent, user.id);
-
-      // 3. Log audit
-      await logBatchAction(
-        user.id,
-        "UPDATE_STATUS",
-        batchId,
-        { oldStatus: batches.find(b => b.id === batchId)?.status, newStatus: status, location },
-        "SUCCESS"
+      // 1. Update status in DB (using unrestricted function for supply chain) - NON-BLOCKING
+      // Pass user.id to avoid redundant lookups
+      // Pass token for high-reliability fetch bypass
+      const token = session?.access_token;
+      updateBatchStatusInDb(batchId, status, location, anomalyReason, user.id, "SUPPLY CHAIN", txnHash, token).catch(err =>
+        console.warn("Background DB sync failed:", err)
       );
+
+      // 2. Add history record (NON-BLOCKING)
+      addBatchHistory(batchId, historyEvent, user.id, token).catch(err => 
+        console.warn("Background history save failed:", err)
+      );
+
+      // 3. Log audit (NON-BLOCKING)
+      logBatchAction(
+        user.id,
+        user.email || '',
+        '',
+        batchId,
+        'status_change',
+        true,
+        { newStatus: status, location, accessToken: token }
+      ).catch(err => console.warn("Background audit log failed:", err));
 
       return batches.find(b => b.id === batchId);
     } catch (error) {
@@ -347,22 +373,22 @@ export function BatchesProvider({ children }: { children: ReactNode }) {
       // Revert on failure
       setBatches(originalBatches);
       notifications.addNotification({
-        type: "error",
-        message: "Failed to update batch status",
-        duration: 5000
+        title: "Update Error",
+        description: "Failed to update batch status",
       });
       return undefined;
     }
   };
 
-  const updateBatchLocation = async (batchId: string, location: string) => {
-    // Current status stays same, just location update? 
-    // Usually location update comes with status change (e.g. In-Transit)
-    // For now, let's assume it preserves current status
+  const updateBatchLocation = async (batchId: string, location: string, txnHash?: string) => {
     const batch = batches.find(b => b.id === batchId);
     if (!batch) return undefined;
 
-    return updateBatchStatus(batchId, batch.status, location);
+    // Logic: If the batch is Approved, the first location update (by Distributor) 
+    // transitions it to In-Transit both locally and in the database.
+    const newStatus = batch.status === "Approved" ? "In-Transit" : batch.status;
+
+    return updateBatchStatus(batchId, newStatus, location, undefined, txnHash);
   };
 
   const value = useMemo(

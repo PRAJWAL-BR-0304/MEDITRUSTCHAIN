@@ -52,7 +52,7 @@ class AuditLogger {
   /**
    * Log a security event
    */
-  async log(event: Omit<AuditLogEntry, 'timestamp'>): Promise<void> {
+  async log(event: Omit<AuditLogEntry, 'timestamp'>, accessToken?: string): Promise<void> {
     const entry: AuditLogEntry = {
       ...event,
       timestamp: new Date().toISOString(),
@@ -75,7 +75,7 @@ class AuditLogger {
     // - SIEM system for compliance
 
     try {
-      await this.persistToDatabase(entry);
+      await this.persistToDatabase(entry, accessToken);
     } catch (error) {
       console.error('[AuditLogger] Failed to persist log entry:', error);
     }
@@ -107,39 +107,73 @@ class AuditLogger {
   /**
    * Persist log entry to database
    */
-  private async persistToDatabase(entry: AuditLogEntry): Promise<void> {
+  private async persistToDatabase(entry: AuditLogEntry, accessToken?: string): Promise<void> {
     try {
+      // BYPASS: Raw fetch for high reliability
+      if (accessToken) {
+        console.log(`🚀 [BYPASS] Persisting audit log ${entry.eventType} via raw fetch...`);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/audit_logs`, {
+                method: 'POST',
+                headers: {
+                    'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    timestamp: entry.timestamp,
+                    event_type: entry.eventType,
+                    user_id: entry.userId,
+                    user_email: entry.userEmail,
+                    user_role: entry.userRole,
+                    organization_id: entry.metadata?.organization_id || entry.metadata?.organizationId,
+                    resource: entry.resource,
+                    action: entry.action,
+                    result: entry.result,
+                    ip_address: entry.ipAddress,
+                    user_agent: entry.userAgent,
+                    metadata: entry.metadata
+                })
+            });
+            if (response.ok) return;
+        } catch (e) {
+            console.error("❌ BYPASS Audit failed:", e);
+        }
+      }
+
       const { createClient } = await import('../supabase/client');
       const supabase = createClient();
 
-      // Get current user's organization_id and role for audit trail
+      // Use provided userId and role if available to skip redundant lookups
+      let currentUserId = entry.userId;
+      let userRole = entry.userRole;
+      let organizationId = entry.metadata?.organization_id || entry.metadata?.organizationId;
+
       const { data: { user } } = await supabase.auth.getUser();
-      let organizationId: string | undefined;
-      let userRole: string | undefined = entry.userRole;
 
       if (user) {
-        // Get organization_id from user metadata
-        organizationId = user.user_metadata?.organization_id;
+        if (!currentUserId) currentUserId = user.id;
+        if (!organizationId) organizationId = user.user_metadata?.organization_id;
+        if (!userRole) userRole = user.user_metadata?.role || user.user_metadata?.organization_type;
         
-        // Get role from metadata or fetch from stakeholder credential
-        if (!userRole) {
-          userRole = user.user_metadata?.role || user.user_metadata?.organization_type;
-        }
-
-        // If still no role, try to get from stakeholder record
+        // Final fallback for role
         if (!userRole && organizationId) {
-          const { data: stakeholder, error: stakeholderError } = await supabase
+          const { data: stakeholder } = await supabase
             .from('stakeholders')
             .select('role')
             .eq('user_id', user.id)
             .eq('is_active', true)
-            .maybeSingle(); // Use maybeSingle() instead of single() to handle 0 rows gracefully
+            .maybeSingle();
           
-          if (stakeholder && !stakeholderError) {
+          if (stakeholder) {
             userRole = stakeholder.role;
           }
         }
       }
+
+      // Create AbortController for timeout to prevent infinite hangs
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
 
       const { error } = await supabase.from('audit_logs').insert({
         timestamp: entry.timestamp,
@@ -158,7 +192,10 @@ class AuditLogger {
           organization_id: organizationId,
           role: userRole,
         },
-      });
+      })
+      .abortSignal(controller.signal);
+      
+      clearTimeout(timeoutId);
 
       if (error) throw error;
     } catch (error) {
@@ -308,7 +345,7 @@ export async function logBatchAction(
       organization_id: organizationId, // Ensure organization_id is in metadata for traceability
       role: role, // Ensure role is in metadata for traceability
     },
-  });
+  }, metadata?.accessToken); // Extract context token if provided
 }
 
 export async function logBlockchainTransaction(

@@ -4,6 +4,7 @@ import { createClient as createServerClient } from '@/lib/supabase/server';
 
 // Create admin client with service role key for user creation
 const supabaseAdmin = createClient(
+
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
@@ -370,6 +371,81 @@ export async function DELETE(request: NextRequest) {
 
     } catch (error: any) {
         console.error('Stakeholder DELETE API error:', error);
+        return NextResponse.json(
+            { success: false, error: error.message || 'Internal server error' },
+            { status: 500 }
+        );
+    }
+}
+
+// GET /api/stakeholders
+// Admin: returns all stakeholders with their organization.
+// Active stakeholder: returns only their own organization's stakeholders.
+export async function GET(request: NextRequest) {
+    try {
+        const serverClient = await createServerClient();
+        const { data: { user: callerUser } } = await serverClient.auth.getUser();
+
+        if (!callerUser) {
+            return NextResponse.json(
+                { success: false, error: 'Not authenticated' },
+                { status: 401 }
+            );
+        }
+
+        // Check if caller is a system admin
+        const { data: adminUser } = await supabaseAdmin
+            .from('admin_users')
+            .select('id, is_active')
+            .eq('id', callerUser.id)
+            .eq('is_active', true)
+            .maybeSingle();
+
+        if (adminUser) {
+            // Admin sees all stakeholders with their organisation details
+            const { data: stakeholders, error } = await supabaseAdmin
+                .from('stakeholders')
+                .select(`
+                    id, full_name, email, role, wallet_address, is_active, phone, position,
+                    created_at, organization_id,
+                    organizations ( id, name, organization_type )
+                `)
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            return NextResponse.json({ success: true, stakeholders: stakeholders ?? [] });
+        }
+
+        // Regular stakeholder: resolve their organisation first, then return org peers
+        const { data: callerStakeholder, error: callerError } = await supabaseAdmin
+            .from('stakeholders')
+            .select('id, organization_id, is_active')
+            .eq('user_id', callerUser.id)
+            .eq('is_active', true)
+            .maybeSingle();
+
+        if (callerError || !callerStakeholder) {
+            return NextResponse.json(
+                { success: false, error: 'Stakeholder record not found or inactive' },
+                { status: 403 }
+            );
+        }
+
+        const { data: stakeholders, error: listError } = await supabaseAdmin
+            .from('stakeholders')
+            .select(`
+                id, full_name, email, role, wallet_address, is_active, phone, position,
+                created_at, organization_id,
+                organizations ( id, name, organization_type )
+            `)
+            .eq('organization_id', callerStakeholder.organization_id)
+            .order('created_at', { ascending: false });
+
+        if (listError) throw listError;
+        return NextResponse.json({ success: true, stakeholders: stakeholders ?? [] });
+
+    } catch (error: any) {
+        console.error('Stakeholder GET API error:', error);
         return NextResponse.json(
             { success: false, error: error.message || 'Internal server error' },
             { status: 500 }

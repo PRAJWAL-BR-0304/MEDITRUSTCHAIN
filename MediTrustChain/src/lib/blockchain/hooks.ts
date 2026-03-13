@@ -65,154 +65,187 @@ export interface BlockchainUser {
   registeredAt: bigint;
 }
 
-export interface CreateBatchParams {
-  batchCode: string;
-  drugName: string;
-  quantity: number;
-  mfgDate: Date;
-  expDate: Date;
-  dataHash?: string;
-}
-
-export interface TransactionResult {
-  success: boolean;
-  hash?: string;
-  error?: string;
-  data?: { batchId?: string;[key: string]: unknown };
-}
-
-export function useContract() {
-  const { contract, wallet, isConfigured } = useBlockchain();
-
-  // Helper to generate data hash from batch info
-  // V2 NOTE: The V2 contract computes the hash on-chain using abi.encode:
-  //   keccak256(abi.encode(batchCode, drugName, quantity, mfgDate, expDate, manufacturer))
-  // This function is for REFERENCE/VERIFICATION only - actual hash is computed on-chain
-  const generateDataHash = useCallback((data: {
-    batchCode?: string;
-    batchId?: string;
+  export interface CreateBatchParams {
+    batchCode: string;
     drugName: string;
-    quantity?: number;
-    qty?: number;
-    mfgDate: number;
-    expDate: number;
-    manufacturer?: string;
-  }): string => {
-    // CRITICAL: Key order must match the on-chain abi.encode order in MediTrustChainV2.sol
-    // Mirror order in computeBatchHash (verification.ts)
-    const deterministicData = {
-      batchCode: data.batchCode || data.batchId, // Support both naming conventions
-      drugName: data.drugName,
-      quantity: data.quantity || data.qty,
-      mfgDate: data.mfgDate,
-      expDate: data.expDate,
-      manufacturer: data.manufacturer || ''  // V2: Include manufacturer in hash
-    };
+    quantity: number;
+    mfgDate: Date;
+    expDate: Date;
+    dataHash?: string;
+    drugTemplateId: number; // NEW
+  }
 
-    const jsonString = JSON.stringify(deterministicData);
-    return keccak256(toUtf8Bytes(jsonString));
-  }, []);
+  export interface TransactionResult {
+    success: boolean;
+    hash?: string;
+    error?: string;
+    data?: { batchId?: string; templateId?: string;[key: string]: unknown };
+  }
 
-  // Check if contract is ready for use
-  const isReady = useCallback((): boolean => {
-    return isConfigured && wallet.isConnected && wallet.isCorrectChain && contract !== null;
-  }, [isConfigured, wallet.isConnected, wallet.isCorrectChain, contract]);
+  export function useContract() {
+    // ... setup and generateDataHash, isReady, registerUser remain the same
+    const { contract, wallet, isConfigured } = useBlockchain();
 
-  // Register user on blockchain
-  const registerUser = useCallback(async (
-    role: UserRole,
-    organizationName: string
-  ): Promise<TransactionResult> => {
-    if (!contract) {
-      return { success: false, error: 'Contract not initialized' };
-    }
+    const generateDataHash = useCallback((data: {
+      batchCode?: string;
+      batchId?: string;
+      drugName: string;
+      quantity?: number;
+      qty?: number;
+      mfgDate: number;
+      expDate: number;
+      manufacturer?: string;
+    }): string => {
+      const deterministicData = {
+        batchCode: data.batchCode || data.batchId,
+        drugName: data.drugName,
+        quantity: data.quantity || data.qty,
+        mfgDate: data.mfgDate,
+        expDate: data.expDate,
+        manufacturer: data.manufacturer || ''
+      };
 
-    try {
-      const tx = await contract.registerUser(role, organizationName);
-      const receipt = await tx.wait();
-      return { success: true, hash: receipt.hash };
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Transaction failed';
-      return { success: false, error: errorMessage };
-    }
-  }, [contract]);
+      const jsonString = JSON.stringify(deterministicData);
+      return keccak256(toUtf8Bytes(jsonString));
+    }, []);
 
-  // Create a new batch on blockchain
-  // V2 NOTE: dataHash is NOW computed ON-CHAIN - we don't pass it anymore
-  // AUTO-REGISTRATION: If user isn't registered, we auto-register them as manufacturer
-  const createBatch = useCallback(async (params: CreateBatchParams): Promise<TransactionResult> => {
-    if (!contract) {
-      return { success: false, error: 'Contract not initialized' };
-    }
+    const isReady = useCallback((): boolean => {
+      return isConfigured && wallet.isConnected && wallet.isCorrectChain && contract !== null;
+    }, [isConfigured, wallet.isConnected, wallet.isCorrectChain, contract]);
 
-    try {
-      // Check if user is registered, if not, auto-register as manufacturer
+    const registerUser = useCallback(async (
+      role: UserRole,
+      organizationName: string
+    ): Promise<TransactionResult> => {
+      if (!contract) {
+        return { success: false, error: 'Contract not initialized' };
+      }
+
       try {
-        // Get signer address using the provider
-        const signer = contract.runner as any;
-        const userAddress = signer?.address || (await signer?.getAddress?.());
-        if (userAddress) {
-          const userInfo = await contract.users(userAddress);
-          // userInfo[3] is isActive in the User struct
-          if (!userInfo[3]) {
-            console.log('[createBatch] User not registered, auto-registering as Manufacturer...');
+        const tx = await contract.registerUser(role, organizationName);
+        const receipt = await tx.wait();
+        return { success: true, hash: receipt.hash };
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : 'Transaction failed';
+        return { success: false, error: errorMessage };
+      }
+    }, [contract]);
+
+    // Regulator approves a drug template
+    const approveDrugTemplate = useCallback(async (
+      drugCode: string,
+      drugName: string,
+      composition: string,
+      strength: string
+    ): Promise<TransactionResult> => {
+      if (!contract) {
+        return { success: false, error: 'Contract not initialized' };
+      }
+
+      try {
+        const tx = await contract.approveDrugTemplate(drugCode, drugName, composition, strength);
+        const receipt = await tx.wait();
+
+        // Extract template ID from event
+        let templateId: string | undefined;
+        let compositionHash: string | undefined;
+        for (const log of receipt.logs) {
+          try {
+            const parsed = contract.interface.parseLog({ topics: [...log.topics], data: log.data });
+            if (parsed?.name === 'DrugTemplateCreated') {
+              templateId = parsed.args.templateId.toString();
+              compositionHash = parsed.args.compositionHash;
+              break;
+            }
+          } catch {
+            // Ignore parse errors
+          }
+        }
+
+        return { success: true, hash: receipt.hash, data: { templateId, compositionHash } };
+      } catch (err: unknown) {
+        let errorMessage = err instanceof Error ? err.message : 'Transaction failed';
+        if (errorMessage.includes('Only approved regulators')) {
+            errorMessage = '🚫 Your wallet is not an approved regulator.';
+        } else if (errorMessage.includes('already exists')) {
+            errorMessage = '🚫 Drug code already exists on the blockchain.';
+        }
+        return { success: false, error: errorMessage };
+      }
+    }, [contract]);
+
+    const createBatch = useCallback(async (params: CreateBatchParams): Promise<TransactionResult> => {
+      if (!contract) {
+        return { success: false, error: 'Contract not initialized' };
+      }
+
+      try {
+        try {
+          const signer = contract.runner as any;
+          const userAddress = signer?.address || (await signer?.getAddress?.());
+          if (userAddress) {
+            const userInfo = await contract.users(userAddress);
+            if (!userInfo[3]) {
+              console.log('[createBatch] User not registered, auto-registering as Manufacturer...');
+              const regTx = await contract.registerUser(UserRole.MANUFACTURER, 'Auto-registered Manufacturer');
+              await regTx.wait();
+              console.log('[createBatch] Auto-registration complete');
+            }
+          }
+        } catch (regCheckErr) {
+          console.log('[createBatch] Registration check failed, attempting auto-register...');
+          try {
             const regTx = await contract.registerUser(UserRole.MANUFACTURER, 'Auto-registered Manufacturer');
             await regTx.wait();
             console.log('[createBatch] Auto-registration complete');
+          } catch (regErr: unknown) {
+            const regErrMessage = regErr instanceof Error ? regErr.message : '';
+            if (!regErrMessage.includes('already registered')) {
+              console.log('[createBatch] Registration error (may be already registered):', regErrMessage);
+            }
           }
         }
-      } catch (regCheckErr) {
-        // If check fails, try to register anyway
-        console.log('[createBatch] Registration check failed, attempting auto-register...');
-        try {
-          const regTx = await contract.registerUser(UserRole.MANUFACTURER, 'Auto-registered Manufacturer');
-          await regTx.wait();
-          console.log('[createBatch] Auto-registration complete');
-        } catch (regErr: unknown) {
-          // Ignore if already registered
-          const regErrMessage = regErr instanceof Error ? regErr.message : '';
-          if (!regErrMessage.includes('already registered')) {
-            console.log('[createBatch] Registration error (may be already registered):', regErrMessage);
+
+        const mfgTimestamp = Math.floor(params.mfgDate.getTime() / 1000);
+        const expTimestamp = Math.floor(params.expDate.getTime() / 1000);
+
+        const tx = await contract.createBatch(
+          params.batchCode,
+          params.drugName,
+          params.quantity,
+          mfgTimestamp,
+          expTimestamp,
+          params.drugTemplateId
+        );
+
+        const receipt = await tx.wait();
+
+        let batchId: bigint | undefined;
+        let dataHash: string | undefined;
+        for (const log of receipt.logs) {
+          try {
+            const parsed = contract.interface.parseLog({ topics: [...log.topics], data: log.data });
+            if (parsed?.name === 'BatchCreated') {
+              batchId = parsed.args.batchId;
+              dataHash = parsed.args.dataHash;
+              break;
+            }
+          } catch {
+            // Continue
           }
         }
+
+        return { success: true, hash: receipt.hash, data: { batchId: batchId?.toString(), dataHash } };
+      } catch (err: unknown) {
+        let errorMessage = err instanceof Error ? err.message : 'Transaction failed';
+        if (errorMessage.includes('not found') || errorMessage.includes('inactive')) {
+            errorMessage = '❌ Invalid or inactive drug template.';
+        } else if (errorMessage.includes('not approved')) {
+            errorMessage = '❌ Drug composition does not match the approved template on the blockchain.';
+        }
+        return { success: false, error: errorMessage };
       }
-
-      const mfgTimestamp = Math.floor(params.mfgDate.getTime() / 1000);
-      const expTimestamp = Math.floor(params.expDate.getTime() / 1000);
-
-      // V2: No dataHash parameter - hash is computed on-chain from core fields
-      const tx = await contract.createBatch(
-        params.batchCode,
-        params.drugName,
-        params.quantity,
-        mfgTimestamp,
-        expTimestamp
-      );
-
-      const receipt = await tx.wait();
-
-      // Try to get the batch ID and dataHash from events
-      let batchId: bigint | undefined;
-      let dataHash: string | undefined;
-      for (const log of receipt.logs) {
-        try {
-          const parsed = contract.interface.parseLog({ topics: [...log.topics], data: log.data });
-          if (parsed?.name === 'BatchCreated') {
-            batchId = parsed.args.batchId;
-            dataHash = parsed.args.dataHash;
-            break;
-          }
-        } catch {
-          // Continue to next log
-        }
-      }
-
-      return { success: true, hash: receipt.hash, data: { batchId: batchId?.toString(), dataHash } };
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Transaction failed';
-      return { success: false, error: errorMessage };
-    }
-  }, [contract]);
+    }, [contract]);
 
   // Helper for auto-registration
   const ensureRegistered = useCallback(async (role: UserRole, roleName: string) => {
@@ -415,8 +448,14 @@ export function useContract() {
 
     try {
       const batchId = await contract.getBatchIdByCode(batchCode);
-      if (Number(batchId) === 0) return null;
-      return getBatch(Number(batchId));
+      const batch = await getBatch(Number(batchId));
+      
+      // Verify that the returned batch actually matches the requested code
+      // This handles the case where batchId 0 is returned for a non-existent code
+      if (batch && batch.batchCode === batchCode) {
+        return batch;
+      }
+      return null;
     } catch (err) {
       console.error('Error getting batch by code:', err);
       return null;
@@ -640,6 +679,7 @@ export function useContract() {
   return {
     isReady,
     registerUser,
+    approveDrugTemplate, // NEW
     createBatch,
     submitForApproval,
     approveBatch,

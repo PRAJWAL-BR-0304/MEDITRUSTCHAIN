@@ -24,6 +24,17 @@ export const SUPPORTED_CHAINS = {
       decimals: 18,
     },
   },
+  localhost: {
+    id: 31337,
+    name: 'Localhost (Hardhat)',
+    rpcUrl: process.env.NEXT_PUBLIC_LOCALHOST_RPC_URL || 'http://127.0.0.1:8545',
+    blockExplorer: 'http://localhost:8545',
+    currency: {
+      name: 'Hardhat ETH',
+      symbol: 'ETH',
+      decimals: 18,
+    },
+  },
 } as const;
 
 // Default chain - can be changed via environment variable
@@ -75,6 +86,7 @@ export enum BatchStatus {
   SOLD = 6,              // Pharmacy sold after verification (TERMINAL)
   EXPIRED = 7,           // Batch expired (TERMINAL)
   RECALLED = 8,          // Regulator recalled (TERMINAL)
+  DELIVERED = 9,         // Delivery confirmed
 }
 
 // Status labels for display
@@ -88,6 +100,7 @@ export const BatchStatusLabels: Record<BatchStatus, string> = {
   [BatchStatus.SOLD]: 'Sold',
   [BatchStatus.EXPIRED]: 'Expired',
   [BatchStatus.RECALLED]: 'Recalled',
+  [BatchStatus.DELIVERED]: 'Delivered',
 };
 
 export const UserRoleLabels: Record<UserRole, string> = {

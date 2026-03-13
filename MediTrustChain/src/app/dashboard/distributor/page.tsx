@@ -172,13 +172,15 @@ export default function DistributorDashboard() {
         }
 
         // Step 3: Update blockchain if needed
+        let txHash: string | undefined = undefined;
         if (shouldUpdateBlockchain) {
           const batchIdNum = Number(blockchainBatch.id);
           const result = await updateStatusOnChain(batchIdNum, targetStatus, trimmedLocation);
 
           if (result.success) {
-            setBlockchainTxHash(result.hash || null);
-            console.log("✅ Blockchain update successful:", result.hash);
+            txHash = result.hash || undefined;
+            setBlockchainTxHash(txHash || null);
+            console.log("✅ Blockchain update successful:", txHash);
           } else {
             console.warn("⚠️ Blockchain error:", result.error);
             toast({
@@ -192,7 +194,7 @@ export default function DistributorDashboard() {
         }
 
         // Step 4: Always update locally
-        const updatedBatch = await updateBatchLocation(verificationResult.batch.id, trimmedLocation);
+        const updatedBatch = await updateBatchLocation(verificationResult.batch.id, trimmedLocation, txHash);
         toast({
           title: "Success",
           description: shouldUpdateBlockchain

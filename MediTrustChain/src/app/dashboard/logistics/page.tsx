@@ -168,13 +168,15 @@ export default function LogisticsDashboard() {
         }
 
         // Step 3: Update blockchain if needed
+        let txHash: string | undefined = undefined;
         if (shouldUpdateBlockchain) {
           const batchIdNum = Number(blockchainBatch.id);
           const result = await updateStatusOnChain(batchIdNum, targetStatus, newLocation);
 
           if (result.success) {
-            setBlockchainTxHash(result.hash || null);
-            console.log("✅ Blockchain status update successful:", result.hash);
+            txHash = result.hash || undefined;
+            setBlockchainTxHash(txHash || null);
+            console.log("✅ Blockchain status update successful:", txHash);
           } else {
             console.warn("⚠️ Blockchain error:", result.error);
             toast({
@@ -187,17 +189,15 @@ export default function LogisticsDashboard() {
           }
         }
 
-        // Step 4: Update local state to match blockchain
+        // Step 4: Update local state 
         const localStatus = targetStatus === 5 ? 'Delivered' : 'In-Transit';
+        await updateBatchStatus(selectedBatch.id, localStatus, newLocation, undefined, txHash);
+
         if (localStatus === 'Delivered') {
-          await updateBatchStatus(selectedBatch.id, 'Delivered', newLocation);
           addNotification({
             title: "📦 Batch Delivered",
             description: `Batch ${selectedBatch.id} (${selectedBatch.name}) has been delivered to ${newLocation}.${shouldUpdateBlockchain ? ' Recorded on blockchain.' : ''}`
           });
-        } else {
-          await updateBatchStatus(selectedBatch.id, 'In-Transit', newLocation);
-          await updateBatchLocation(selectedBatch.id, newLocation);
         }
 
         toast({
@@ -209,18 +209,17 @@ export default function LogisticsDashboard() {
         setTimeout(() => {
           setIsUpdateDialogOpen(false);
           setSelectedBatch(null);
-        }, 1500);
+        }, 800);
       } else {
         // Fallback: Update locally if blockchain not configured
-        if (newStatus === 'Delivered' || newStatus === 'At-Pharmacy') {
-          await updateBatchStatus(selectedBatch.id, 'Delivered', newLocation);
+        const localStatus = (newStatus === 'Delivered' || newStatus === 'At-Pharmacy') ? 'Delivered' : 'In-Transit';
+        await updateBatchStatus(selectedBatch.id, localStatus, newLocation);
+
+        if (localStatus === 'Delivered') {
           addNotification({
             title: "📦 Batch Delivered",
             description: `Batch ${selectedBatch.id} (${selectedBatch.name}) has been delivered to ${newLocation}.`
           });
-        } else {
-          await updateBatchStatus(selectedBatch.id, 'In-Transit', newLocation);
-          await updateBatchLocation(selectedBatch.id, newLocation);
         }
 
         toast({

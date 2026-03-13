@@ -36,6 +36,7 @@ export interface BatchVerificationInput {
   quantity: number;
   mfgDate: number; // Unix timestamp
   expDate: number; // Unix timestamp
+  manufacturer: string;
 }
 
 // V2: Separated core and state data from on-chain
@@ -118,6 +119,7 @@ export function computeBatchHash(data: BatchVerificationInput): string {
     quantity: data.quantity,
     mfgDate: data.mfgDate,
     expDate: data.expDate,
+    manufacturer: data.manufacturer || '',
   };
 
   const jsonString = JSON.stringify(hashInput);

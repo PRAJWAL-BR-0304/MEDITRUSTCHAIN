@@ -192,14 +192,16 @@ export default function PharmacyDashboard() {
         }
 
         // Step 3: Update blockchain if needed
+        let txHash: string | undefined = undefined;
         if (shouldUpdateBlockchain) {
           // V2: Transition to SOLD (status 6)
           const batchIdNum = Number(blockchainBatch.id);
           const result = await updateStatusOnChain(batchIdNum, 6, "Pharmacy - Sold to Patient");
 
           if (result.success) {
-            setBlockchainTxHash(result.hash || null);
-            console.log("✅ Blockchain update successful:", result.hash);
+            txHash = result.hash || undefined;
+            setBlockchainTxHash(txHash || null);
+            console.log("✅ Blockchain update successful:", txHash);
           } else {
             console.warn("⚠️ Blockchain error:", result.error);
             toast({
@@ -213,7 +215,7 @@ export default function PharmacyDashboard() {
         }
 
         // V2: Update local status to Sold
-        await updateBatchStatus(verificationResult.batch.id, 'Sold', "Pharmacy - Sold to Patient");
+        await updateBatchStatus(verificationResult.batch.id, 'Sold', "Pharmacy - Sold to Patient", undefined, txHash);
         toast({
           title: '✅ Sale Recorded',
           description: `Batch ${verificationResult.batch.id} has been marked as SOLD.${shouldUpdateBlockchain ? ' Recorded on blockchain.' : ''}`
@@ -422,7 +424,7 @@ export default function PharmacyDashboard() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <h3 className="text-lg font-semibold mb-2">In-Transit</h3>
+              <h3 className="text-lg font-semibold mb-2">In-Transit (Arriving)</h3>
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -433,18 +435,44 @@ export default function PharmacyDashboard() {
                 </TableHeader>
                 <TableBody>
                   {arrivingBatches.length > 0 ? arrivingBatches.map((batch) => (
-                    <TableRow key={batch.id} onClick={() => setSelectedBatch(batch)} className="cursor-pointer">
+                    <TableRow key={batch.id} onClick={() => setSelectedBatch(batch)} className="cursor-pointer hover:bg-muted/50 transition-colors">
                       <TableCell>{batch.name}</TableCell>
                       <TableCell className="font-medium">{batch.id}</TableCell>
                       <TableCell className="text-right">{lastLocation(batch)}</TableCell>
                     </TableRow>
                   )) : (
-                    <TableRow><TableCell colSpan={3} className="text-center">No batches in transit.</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={3} className="text-center py-4 text-muted-foreground">No batches currently in transit.</TableCell></TableRow>
                   )}
                 </TableBody>
               </Table>
 
-              <h3 className="text-lg font-semibold mt-6 mb-2">Delivered</h3>
+              <h3 className="text-lg font-semibold mt-6 mb-2 text-green-600 dark:text-green-400">Ready for Sale (Shelf)</h3>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Drug Name</TableHead>
+                    <TableHead>Batch ID</TableHead>
+                    <TableHead className="text-right">Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {atPharmacyBatches.length > 0 ? atPharmacyBatches.map((batch) => (
+                    <TableRow key={batch.id} onClick={() => setSelectedBatch(batch)} className="cursor-pointer hover:bg-muted/50 transition-colors">
+                      <TableCell>{batch.name}</TableCell>
+                      <TableCell className="font-medium">{batch.id}</TableCell>
+                      <TableCell className="text-right">
+                         <Button size="xs" variant="ghost" onClick={(e) => { e.stopPropagation(); setBatchId(batch.id); handleVerify(); }}>
+                           Verification Ready
+                         </Button>
+                      </TableCell>
+                    </TableRow>
+                  )) : (
+                    <TableRow><TableCell colSpan={3} className="text-center py-4 text-muted-foreground">No stock currently on shelf.</TableCell></TableRow>
+                  )}
+                </TableBody>
+              </Table>
+
+              <h3 className="text-lg font-semibold mt-6 mb-2 opacity-70">Recently Sold</h3>
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -455,15 +483,15 @@ export default function PharmacyDashboard() {
                 </TableHeader>
                 <TableBody>
                   {soldBatches.length > 0 ? soldBatches.map((batch: Batch) => (
-                    <TableRow key={batch.id} onClick={() => setSelectedBatch(batch)} className="cursor-pointer">
+                    <TableRow key={batch.id} onClick={() => setSelectedBatch(batch)} className="cursor-pointer hover:bg-muted/50 transition-colors">
                       <TableCell>{batch.name}</TableCell>
                       <TableCell className="font-medium">{batch.id}</TableCell>
                       <TableCell className="text-right">
-                        <Badge variant="outline">{batch.status}</Badge>
+                        <Badge variant="outline" className="bg-muted text-muted-foreground">{batch.status}</Badge>
                       </TableCell>
                     </TableRow>
                   )) : (
-                    <TableRow><TableCell colSpan={3} className="text-center">No batches sold yet.</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={3} className="text-center py-4 text-muted-foreground">No batches sold yet.</TableCell></TableRow>
                   )}
                 </TableBody>
               </Table>

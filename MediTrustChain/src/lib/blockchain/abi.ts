@@ -684,6 +684,11 @@ export const MEDITRUST_ABI = [
                            "internalType":  "uint256",
                            "name":  "_expDate",
                            "type":  "uint256"
+                       },
+                       {
+                           "internalType":  "uint256",
+                           "name":  "_drugTemplateId",
+                           "type":  "uint256"
                        }
                    ],
         "name":  "createBatch",
@@ -1306,5 +1311,142 @@ export const MEDITRUST_ABI = [
                     ],
         "stateMutability":  "view",
         "type":  "function"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "templateId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "drugCode",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "drugName",
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "approvedBy",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes32",
+                "name": "compositionHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "DrugTemplateCreated",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "drugCode",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "drugName",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "composition",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "strength",
+                "type": "string"
+            }
+        ],
+        "name": "approveDrugTemplate",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "templateId",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "templateId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getDrugTemplate",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "drugCode",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "drugName",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "composition",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "strength",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "compositionHash",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "approvedBy",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "approvedAt",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "bool",
+                        "name": "isActive",
+                        "type": "bool"
+                    }
+                ],
+                "internalType": "struct MediTrustChainV2.DrugTemplate",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
     }
 ];

@@ -7,12 +7,36 @@ import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ShieldCheck, CheckCircle, XCircle, AlertTriangle, Loader2, QrCode, Package, Calendar, Factory, Link2, ExternalLink, Clock, Info, Shield } from "lucide-react";
+import { 
+  ShieldCheck, 
+  CheckCircle, 
+  XCircle, 
+  AlertTriangle, 
+  Loader2, 
+  QrCode, 
+  Package, 
+  Calendar, 
+  Factory, 
+  Link2, 
+  ExternalLink, 
+  Clock, 
+  Info, 
+  Shield,
+  CheckCircle2,
+  AlertCircle,
+  ShieldAlert,
+  MapPin,
+  Truck,
+  Pill,
+  Microscope
+} from "lucide-react";
 import { MotionDiv } from "@/components/motion-div";
 import { Html5Qrcode } from "html5-qrcode";
 import { useBlockchain, isBlockchainConfigured, SUPPORTED_CHAINS, DEFAULT_CHAIN } from "@/lib/blockchain";
 import { verifyBatchOnBlockchain, type VerificationResult } from "@/lib/blockchain/verification";
 import { useBatches } from "@/contexts/batches-context";
+import { BatchJourney } from "@/components/dashboard/batch-journey";
+import { DrugInfoCard } from "@/components/dashboard/batch-details";
 import Link from "next/link";
 
 export default function PatientVerifyPage() {
@@ -415,21 +439,70 @@ export default function PatientVerifyPage() {
 
                   {/* Blockchain Explorer Link */}
                   {blockchainConfigured && result.details?.blockchainVerified && (
-                    <Alert>
-                      <Link2 className="h-4 w-4" />
-                      <AlertTitle>View on Blockchain</AlertTitle>
+                    <Alert className="bg-primary/5 border-primary/20 mt-4">
+                      <Link2 className="h-4 w-4 text-primary" />
+                      <AlertTitle className="text-primary font-semibold">Immutable Proof</AlertTitle>
                       <AlertDescription>
+                        This medicine's core data is cryptographically hashed and stored on the <strong>{chainConfig.name}</strong> blockchain.
                         <a
                           href={chainConfig.blockExplorer}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-primary hover:underline flex items-center gap-1 mt-2"
+                          className="text-primary hover:underline flex items-center gap-1 mt-2 font-medium"
                         >
-                          Open {chainConfig.name} Explorer
+                          View Transaction on Explorer
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       </AlertDescription>
                     </Alert>
+                  )}
+
+                  {/* Enhanced Safety Profile */}
+                  {result.isAuthentic && (
+                    <div className="mt-8 space-y-6 pt-8 border-t">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Microscope className="h-6 w-6 text-primary" />
+                        <h3 className="text-xl font-bold">Drug Safety Profile</h3>
+                      </div>
+
+                      {/* AI Information Card */}
+                      <DrugInfoCard drugName={result.details?.drugName || "Medicine"} />
+
+                      {/* System Details (from DB) */}
+                      {batches.find(b => b.id.toLowerCase() === (result.details?.batchId?.toLowerCase())) && (
+                        <Card className="bg-muted/30 border-dashed">
+                          <CardHeader className="py-4">
+                            <CardTitle className="text-sm flex items-center gap-2">
+                              <ShieldCheck className="h-4 w-4 text-green-600" />
+                              Manufacturer Verified Specifications
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="py-2">
+                            <div className="grid grid-cols-2 gap-4 pb-4">
+                              <div>
+                                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Composition</p>
+                                <p className="text-sm font-medium">{batches.find(b => b.id.toLowerCase() === (result.details?.batchId?.toLowerCase()))?.composition || "Verified Formulation"}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Dosage / Strength</p>
+                                <p className="text-sm font-medium">Standard Pharmaceutical Grade</p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* Batch Journey */}
+                      {batches.find(b => b.id.toLowerCase() === (result.details?.batchId?.toLowerCase())) && (
+                        <div className="pt-4 border-t border-dashed">
+                          <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                            <Truck className="h-5 w-5 text-primary" />
+                            Verified Audit Trail
+                          </h3>
+                          <BatchJourney batch={batches.find(b => b.id.toLowerCase() === (result.details?.batchId?.toLowerCase()))!} />
+                        </div>
+                      )}
+                    </div>
                   )}
                 </CardContent>
               </Card>

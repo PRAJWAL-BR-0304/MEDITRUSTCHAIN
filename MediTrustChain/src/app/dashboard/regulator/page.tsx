@@ -26,6 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BlockchainProof } from "@/components/dashboard/blockchain-proof";
 import { BlockchainRegistration } from "@/components/dashboard/blockchain-registration";
+import { RegulatorDrugApproval } from "@/components/dashboard/regulator-drug-approval";
 import { UserRole } from "@/lib/blockchain";
 
 type ComplianceLog = {
@@ -248,9 +249,10 @@ export default function RegulatorDashboard() {
 
           // Step 3: Generate approval hash per specification
           const approvalHash = generateDataHash({
-            batchId: batchIdNum,
-            timestamp: Date.now(),
-            action: 'approve'
+            batchId: String(batchIdNum),
+            drugName: '',
+            mfgDate: 0,
+            expDate: 0,
           });
           console.log(`🔐 Generated approval hash: ${approvalHash.slice(0, 10)}...`);
 
@@ -286,7 +288,12 @@ export default function RegulatorDashboard() {
       }
 
       // Update locally only after blockchain succeeds (or if blockchain not configured)
-      await updateBatchStatus(selectedBatch.id, "Approved", "Regulatory Authority");
+      // This is now non-blocking, so we can close the UI faster
+      updateBatchStatus(selectedBatch.id, "Approved", "Regulatory Authority", undefined, blockchainTxHash || undefined);
+
+      // CLOSE DIALOG IMMEDIATELY - Don't wait for notifications or messages
+      setIsApproveDialogOpen(false);
+      setIsBlockchainSubmitting(false);
 
       const approvalMessage = isNearExpiry
         ? `Batch ${selectedBatch.id} approved. Warning: Expires on ${format(expiryDate, 'MMM dd, yyyy')} (within 30 days).`
@@ -541,6 +548,10 @@ export default function RegulatorDashboard() {
               <Eye className="h-4 w-4" />
               Audit Log
             </TabsTrigger>
+            <TabsTrigger value="drugs" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Drug Templates
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="pending">
@@ -718,6 +729,10 @@ export default function RegulatorDashboard() {
                 </ScrollArea>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="drugs">
+             <RegulatorDrugApproval />
           </TabsContent>
         </Tabs>
 

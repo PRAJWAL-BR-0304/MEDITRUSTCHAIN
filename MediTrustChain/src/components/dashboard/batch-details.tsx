@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { isBlockchainConfigured } from "@/lib/blockchain";
 
-function DrugInfoCard({ drugName }: { drugName: string }) {
+export function DrugInfoCard({ drugName }: { drugName: string }) {
     const [drugInfo, setDrugInfo] = useState<DrugInfoOutput | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
