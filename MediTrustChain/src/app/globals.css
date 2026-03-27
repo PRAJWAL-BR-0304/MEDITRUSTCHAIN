@@ -4,62 +4,62 @@
 
 @layer base {
   :root {
-    /* MedAssure Modern Healthcare Color Palette - Light Mode */
-    --background: 210 20% 99%;
-    --foreground: 215 25% 15%;
+    /* MedAssure Modern Healthcare Color Palette - Light Mode Refined */
+    --background: 210 40% 98.5%;
+    --foreground: 215 35% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 215 35% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 215 35% 12%;
     
-    /* Primary: Deep Medical Blue */
-    --primary: 199 89% 48%;
+    /* Primary: Deep Medical Blue - Slightly more vibrant */
+    --primary: 199 92% 46%;
     --primary-foreground: 0 0% 100%;
     
-    /* Secondary: Soft Teal */
-    --secondary: 172 66% 95%;
-    --secondary-foreground: 172 50% 30%;
+    /* Secondary: Soft Teal - Slightly more depth */
+    --secondary: 172 66% 96%;
+    --secondary-foreground: 172 60% 25%;
     
-    /* Muted: Cool Gray */
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 15% 45%;
+    /* Muted: Cool Gray - Better contrast */
+    --muted: 210 30% 96%;
+    --muted-foreground: 215 20% 40%;
     
     /* Accent: Fresh Teal */
-    --accent: 172 66% 50%;
+    --accent: 172 75% 48%;
     --accent-foreground: 0 0% 100%;
     
     /* Success: Medical Green */
-    --success: 152 76% 42%;
+    --success: 152 76% 40%;
     --success-foreground: 0 0% 100%;
     
     /* Warning: Warm Amber */
-    --warning: 38 92% 50%;
+    --warning: 38 95% 48%;
     --warning-foreground: 0 0% 100%;
     
-    --destructive: 0 72% 51%;
+    --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 20% 91%;
-    --input: 214 20% 91%;
-    --ring: 199 89% 48%;
+    --border: 214 25% 91%;
+    --input: 214 25% 91%;
+    --ring: 199 92% 46%;
     
     /* Chart Colors - Healthcare inspired */
-    --chart-1: 199 89% 48%;
-    --chart-2: 172 66% 50%;
-    --chart-3: 152 76% 42%;
-    --chart-4: 38 92% 50%;
-    --chart-5: 262 83% 58%;
+    --chart-1: 199 92% 46%;
+    --chart-2: 172 75% 48%;
+    --chart-3: 152 76% 40%;
+    --chart-4: 38 95% 48%;
+    --chart-5: 262 85% 55%;
     
-    --radius: 0.75rem;
+    --radius: 1rem; /* Slightly more rounded for premium feel */
     
     /* Sidebar */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 215 25% 15%;
-    --sidebar-primary: 199 89% 48%;
+    --sidebar-foreground: 215 35% 12%;
+    --sidebar-primary: 199 92% 46%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 172 66% 95%;
-    --sidebar-accent-foreground: 172 50% 30%;
-    --sidebar-border: 214 20% 91%;
-    --sidebar-ring: 199 89% 48%;
+    --sidebar-accent: 172 66% 96%;
+    --sidebar-accent-foreground: 172 60% 25%;
+    --sidebar-border: 214 25% 91%;
+    --sidebar-ring: 199 92% 46%;
   }
  
   .dark {
@@ -417,14 +417,47 @@
   
   /* Card variants */
   .card-modern {
-    @apply bg-card rounded-2xl border border-border/50 shadow-sm overflow-hidden;
+    @apply bg-card rounded-3xl border border-border/40 shadow-sm shadow-primary/5 overflow-hidden transition-all duration-300;
   }
   
   .card-elevated {
-    @apply bg-card rounded-2xl border border-border/30 shadow-xl shadow-black/5;
+    @apply bg-card rounded-3xl border border-border/20 shadow-xl shadow-primary/5 backdrop-blur-sm;
   }
   
   .card-interactive {
-    @apply bg-card rounded-2xl border border-border/50 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 hover:border-primary/20 hover:-translate-y-0.5;
+    @apply bg-card rounded-3xl border border-border/40 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 hover:-translate-y-1;
+  }
+
+  /* Status Backgrounds with proper contrast in dark mode */
+  .bg-success-subtle {
+    @apply bg-success/10 text-success;
+  }
+  
+  .bg-warning-subtle {
+    @apply bg-warning/10 text-warning;
+  }
+  
+  .bg-destructive-subtle {
+    @apply bg-destructive/10 text-destructive;
+  }
+  
+  .bg-primary-subtle {
+    @apply bg-primary/10 text-primary;
+  }
+
+  /* Premium Atmosphere */
+  .mesh-gradient {
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(var(--primary)/0.15) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(var(--accent)/0.1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(var(--primary)/0.15) 0, transparent 50%);
+  }
+
+  .glass-premium {
+    @apply bg-background/60 backdrop-blur-xl border border-white/20 shadow-2xl shadow-primary/5;
+  }
+
+  .btn-premium {
+    @apply bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300 hover:shadow-xl hover:shadow-primary/35 hover:-translate-y-0.5 active:translate-y-0 rounded-2xl font-semibold;
   }
 }

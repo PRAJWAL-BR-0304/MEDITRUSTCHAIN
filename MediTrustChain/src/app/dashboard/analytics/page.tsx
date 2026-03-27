@@ -157,7 +157,7 @@ export default function EnhancedAnalyticsPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold font-headline bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold font-headline bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-500 bg-clip-text text-transparent">
               Analytics Dashboard
             </h1>
             <p className="text-muted-foreground mt-2 text-lg">
@@ -178,30 +178,30 @@ export default function EnhancedAnalyticsPage() {
 
         {/* Key Metrics Overview */}
         <div className="grid gap-4 md:grid-cols-4">
-          <Card className="relative overflow-hidden border-2 border-blue-500/20 hover:border-blue-500/40 transition-colors">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-full blur-2xl" />
+          <Card className="relative overflow-hidden border-2 border-primary/20 hover:border-primary/40 transition-colors bg-card">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/20 to-primary/30 rounded-full blur-2xl" />
             <CardContent className="pt-6 relative">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Total Batches</p>
-                  <p className="text-3xl font-bold text-blue-600">{batchMetrics.totalBatches}</p>
+                  <p className="text-3xl font-bold text-primary">{batchMetrics.totalBatches}</p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {batchMetrics.activeBatches} active
                   </p>
                 </div>
-                <Package className="h-10 w-10 text-blue-500/50" />
+                <Package className="h-10 w-10 text-primary/50" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="relative overflow-hidden border-2 border-green-500/20 hover:border-green-500/40 transition-colors">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-500/20 to-green-600/20 rounded-full blur-2xl" />
+          <Card className="relative overflow-hidden border-2 border-success/20 hover:border-success/40 transition-colors bg-card">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-success/20 to-success/30 rounded-full blur-2xl" />
             <CardContent className="pt-6 relative">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Verification Rate</p>
-                  <p className="text-3xl font-bold text-green-600">{batchMetrics.verificationRate}%</p>
-                  <Badge variant="outline" className="mt-1 bg-green-500/10 border-green-500">
+                  <p className="text-3xl font-bold text-success">{batchMetrics.verificationRate}%</p>
+                  <Badge variant="outline" className="mt-1 bg-success-subtle border-success/30">
                     {batchMetrics.verificationRate >= 95 ? 'Excellent' : batchMetrics.verificationRate >= 85 ? 'Good' : 'Needs Improvement'}
                   </Badge>
                 </div>
@@ -226,20 +226,20 @@ export default function EnhancedAnalyticsPage() {
             </CardContent>
           </Card>
 
-          <Card className="relative overflow-hidden border-2 border-orange-500/20 hover:border-orange-500/40 transition-colors">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-full blur-2xl" />
+          <Card className="relative overflow-hidden border-2 border-warning/20 hover:border-warning/40 transition-colors bg-card">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-warning/20 to-warning/30 rounded-full blur-2xl" />
             <CardContent className="pt-6 relative">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">Supply Chain</p>
-                  <p className="text-3xl font-bold text-orange-600">
+                  <p className="text-3xl font-bold text-warning">
                     {supplyChainMetrics.manufacturerCount + supplyChainMetrics.distributorCount + supplyChainMetrics.pharmacyCount}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
                     {supplyChainMetrics.totalTransactions} transactions
                   </p>
                 </div>
-                <Users className="h-10 w-10 text-orange-500/50" />
+                <Users className="h-10 w-10 text-warning/50" />
               </div>
             </CardContent>
           </Card>
@@ -374,9 +374,9 @@ export default function EnhancedAnalyticsPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-blue-500/10 rounded-lg border border-blue-500">
+                    <div className="flex items-center justify-between p-3 bg-primary-subtle rounded-lg border border-primary/20">
                       <span className="text-sm font-medium">Total Units</span>
-                      <span className="text-2xl font-bold text-blue-600">
+                      <span className="text-2xl font-bold text-primary">
                         {inventoryMetrics.totalUnits.toLocaleString()}
                       </span>
                     </div>

@@ -31,30 +31,30 @@ export function AnomalyDetectionDashboard({
   const severityConfig = {
     critical: {
       icon: '🚨',
-      bg: 'bg-red-500/10',
-      border: 'border-red-500',
-      text: 'text-red-700 dark:text-red-400',
+      bg: 'bg-destructive-subtle',
+      border: 'border-destructive/50',
+      text: 'text-destructive',
       badge: 'destructive',
     },
     high: {
       icon: '⚠️',
-      bg: 'bg-orange-500/10',
-      border: 'border-orange-500',
-      text: 'text-orange-700 dark:text-orange-400',
+      bg: 'bg-warning-subtle',
+      border: 'border-warning/50',
+      text: 'text-warning',
       badge: 'secondary',
     },
     medium: {
       icon: '⚡',
-      bg: 'bg-yellow-500/10',
-      border: 'border-yellow-500',
-      text: 'text-yellow-700 dark:text-yellow-400',
+      bg: 'bg-warning-subtle',
+      border: 'border-warning/30',
+      text: 'text-warning',
       badge: 'outline',
     },
     low: {
       icon: 'ℹ️',
-      bg: 'bg-blue-500/10',
-      border: 'border-blue-500',
-      text: 'text-blue-700 dark:text-blue-400',
+      bg: 'bg-primary-subtle',
+      border: 'border-primary/30',
+      text: 'text-primary',
       badge: 'outline',
     },
   } as const;
@@ -68,10 +68,10 @@ export function AnomalyDetectionDashboard({
   };
 
   const statusConfig = {
-    new: { label: 'New', color: 'bg-blue-500' },
-    investigating: { label: 'Investigating', color: 'bg-yellow-500' },
-    resolved: { label: 'Resolved', color: 'bg-green-500' },
-    false_positive: { label: 'False Positive', color: 'bg-gray-500' },
+    new: { label: 'New', color: 'bg-primary text-primary-foreground' },
+    investigating: { label: 'Investigating', color: 'bg-warning text-warning-foreground' },
+    resolved: { label: 'Resolved', color: 'bg-success text-success-foreground' },
+    false_positive: { label: 'False Positive', color: 'bg-muted text-muted-foreground' },
   };
 
   const groupedAnomalies = anomalies.reduce((acc, anomaly) => {
@@ -117,7 +117,7 @@ export function AnomalyDetectionDashboard({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5 text-orange-500" />
+            <AlertTriangle className="h-5 w-5 text-warning" />
             Detected Anomalies
           </CardTitle>
           <CardDescription>
@@ -127,7 +127,7 @@ export function AnomalyDetectionDashboard({
         <CardContent>
           {anomalies.length === 0 ? (
             <div className="text-center py-12">
-              <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+              <CheckCircle className="h-12 w-12 text-success mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No Anomalies Detected</h3>
               <p className="text-sm text-muted-foreground">
                 Your supply chain is operating normally

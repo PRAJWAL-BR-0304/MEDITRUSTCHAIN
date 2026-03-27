@@ -461,7 +461,7 @@ export default function PharmacyDashboard() {
                       <TableCell>{batch.name}</TableCell>
                       <TableCell className="font-medium">{batch.id}</TableCell>
                       <TableCell className="text-right">
-                         <Button size="xs" variant="ghost" onClick={(e) => { e.stopPropagation(); setBatchId(batch.id); handleVerify(); }}>
+                         <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setBatchId(batch.id); handleVerify(); }}>
                            Verification Ready
                          </Button>
                       </TableCell>

@@ -67,19 +67,19 @@ export function DashboardNav({ isMobile = false }: { isMobile?: boolean }) {
       <Link
         href={href}
         className={cn(
-          "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+          "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-300",
           isActive 
-            ? "text-primary" 
-            : "text-muted-foreground hover:text-foreground",
+            ? "text-primary scale-[1.02]" 
+            : "text-muted-foreground hover:text-foreground hover:bg-primary/5",
           isMobile && "text-base py-3"
         )}
       >
         {/* Active indicator */}
         {isActive && !isMobile && (
-          <span className="absolute inset-0 rounded-xl bg-primary/10" />
+          <span className="absolute inset-0 rounded-xl bg-primary/10 shadow-sm shadow-primary/5 ring-1 ring-primary/20 backdrop-blur-sm" />
         )}
         {isActive && isMobile && (
-          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full bg-primary" />
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full bg-primary shadow-lg shadow-primary/50" />
         )}
         
         <Icon className={cn(

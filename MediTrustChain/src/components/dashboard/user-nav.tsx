@@ -32,11 +32,23 @@ export function UserNav() {
 
   const displayRole = isAdmin ? 'admin' : organizationType;
 
-  const handleLogout = async () => {
+  const handleLogout = async (e?: Event) => {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
+    
+    console.log("Logout initiated from UserNav");
     try {
+      if (typeof window !== 'undefined') {
+        // Direct feedback since logs might be missed
+        console.log("Attempting to call logout...");
+      }
       await logout();
     } catch (error) {
+      console.error("Logout failed:", error);
       showError(error, "Logout");
+      // Fallback
+      window.location.href = "/login";
     }
   };
 
@@ -132,7 +144,10 @@ export function UserNav() {
           </DropdownMenuSub>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={handleLogout} className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 focus:bg-red-500/10">
+        <DropdownMenuItem 
+          onSelect={handleLogout} 
+          className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 focus:bg-red-500/10"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>

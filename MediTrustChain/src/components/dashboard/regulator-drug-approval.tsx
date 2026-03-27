@@ -236,7 +236,7 @@ export function RegulatorDrugApproval() {
                     <TableCell>{drug.strength}</TableCell>
                     <TableCell>
                       {drug.blockchain_tx_hash ? (
-                        <Badge className="bg-green-500 hover:bg-green-600">On-Chain Locked</Badge>
+                        <Badge className="bg-success text-success-foreground hover:bg-success/90">On-Chain Locked</Badge>
                       ) : (
                         <Badge variant="secondary">DB Only</Badge>
                       )}

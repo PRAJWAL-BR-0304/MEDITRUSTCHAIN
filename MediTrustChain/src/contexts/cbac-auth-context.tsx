@@ -7,7 +7,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { createContext, useContext, useState, useMemo, useEffect } from "react";
+import { createContext, useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
@@ -278,18 +278,22 @@ export function CbacAuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
+    console.log("CbacAuthContext: Executing logout...");
     try {
       await supabase.auth.signOut({ scope: 'local' });
+      console.log("Supabase signOut completed");
     } catch (error: any) {
       console.error("Logout error:", error?.message);
     } finally {
       // ALWAYS reset state and force hard redirect
       resetState();
-      // Use window.location for hard redirect - router.push may not work after signOut
-      window.location.href = "/login";
+      console.log("State reset. Redirecting to /login...");
+      // Use absolute URL to ensure it works across different host setups if necessary
+      // but usually /login is fine. Let's stick to absolute relative.
+      window.location.href = window.location.origin + "/login";
     }
-  };
+  }, [supabase]);
 
   const value = useMemo(
     () => ({
@@ -306,7 +310,7 @@ export function CbacAuthProvider({ children }: { children: ReactNode }) {
       logout,
       isMounted,
     }),
-    [user, session, organizationType, organization, stakeholder, isAdmin, isAuthenticated, isLoading, isMounted]
+    [user, session, organizationType, organization, stakeholder, isAdmin, isAuthenticated, isLoading, isMounted, logout]
   );
 
   return <CbacAuthContext.Provider value={value}>{children}</CbacAuthContext.Provider>;

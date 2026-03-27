@@ -17,9 +17,9 @@ export function GeographicDistribution({ data }: GeographicDistributionProps) {
 
   const getIncidentSeverity = (incidents: number, batches: number) => {
     const rate = (incidents / batches) * 100;
-    if (rate > 5) return { level: 'high', color: 'text-red-600', bg: 'bg-red-500/10' };
-    if (rate > 2) return { level: 'medium', color: 'text-yellow-600', bg: 'bg-yellow-500/10' };
-    return { level: 'low', color: 'text-green-600', bg: 'bg-green-500/10' };
+    if (rate > 5) return { level: 'high', color: 'text-destructive', bg: 'bg-destructive-subtle' };
+    if (rate > 2) return { level: 'medium', color: 'text-warning', bg: 'bg-warning-subtle' };
+    return { level: 'low', color: 'text-success', bg: 'bg-success-subtle' };
   };
 
   const getVerificationRate = (verifications: number, batches: number) => {
@@ -30,7 +30,7 @@ export function GeographicDistribution({ data }: GeographicDistributionProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-blue-600" />
+          <MapPin className="h-5 w-5 text-primary" />
           Geographic Distribution
         </CardTitle>
         <CardDescription>
@@ -40,17 +40,17 @@ export function GeographicDistribution({ data }: GeographicDistributionProps) {
       <CardContent>
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="text-center p-4 bg-blue-500/10 rounded-lg border border-blue-500">
+          <div className="text-center p-4 bg-primary-subtle rounded-lg border border-primary/20">
             <p className="text-sm text-muted-foreground mb-1">Total Locations</p>
-            <p className="text-3xl font-bold text-blue-600">{data.length}</p>
+            <p className="text-3xl font-bold text-primary">{data.length}</p>
           </div>
-          <div className="text-center p-4 bg-green-500/10 rounded-lg border border-green-500">
+          <div className="text-center p-4 bg-success-subtle rounded-lg border border-success/20">
             <p className="text-sm text-muted-foreground mb-1">Total Batches</p>
-            <p className="text-3xl font-bold text-green-600">{totalBatches}</p>
+            <p className="text-3xl font-bold text-success">{totalBatches}</p>
           </div>
-          <div className="text-center p-4 bg-purple-500/10 rounded-lg border border-purple-500">
+          <div className="text-center p-4 bg-accent/10 rounded-lg border border-accent/20">
             <p className="text-sm text-muted-foreground mb-1">Verification Rate</p>
-            <p className="text-3xl font-bold text-purple-600">
+            <p className="text-3xl font-bold text-accent">
               {totalBatches > 0 ? Math.round((totalVerifications / totalBatches) * 100) : 0}%
             </p>
           </div>
@@ -72,7 +72,7 @@ export function GeographicDistribution({ data }: GeographicDistributionProps) {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <MapPin className="h-4 w-4 text-blue-600" />
+                        <MapPin className="h-4 w-4 text-primary" />
                         <h4 className="font-semibold">{location.location}</h4>
                       </div>
                       {location.city && location.state && (
@@ -83,14 +83,14 @@ export function GeographicDistribution({ data }: GeographicDistributionProps) {
                     </div>
                     <div className="flex gap-2">
                       {location.incidents === 0 ? (
-                        <Badge variant="outline" className="bg-green-500/10 border-green-500">
+                        <Badge variant="outline" className="bg-success-subtle border-success/30">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           No Incidents
                         </Badge>
                       ) : (
                         <Badge
                           variant="outline"
-                          className={`${incidentSeverity.bg} border-${incidentSeverity.level === 'high' ? 'red' : incidentSeverity.level === 'medium' ? 'yellow' : 'green'}-500`}
+                          className={`${incidentSeverity.bg} border-${incidentSeverity.level === 'high' ? 'destructive' : incidentSeverity.level === 'medium' ? 'warning' : 'success'}/30`}
                         >
                           <AlertTriangle className="h-3 w-3 mr-1" />
                           {location.incidents} Incident{location.incidents > 1 ? 's' : ''}
@@ -137,10 +137,10 @@ export function GeographicDistribution({ data }: GeographicDistributionProps) {
                       <div
                         className={`h-full transition-all ${
                           verificationRate >= 90
-                            ? 'bg-green-500'
+                            ? 'bg-success'
                             : verificationRate >= 70
-                            ? 'bg-yellow-500'
-                            : 'bg-red-500'
+                            ? 'bg-warning'
+                            : 'bg-destructive'
                         }`}
                         style={{ width: `${verificationRate}%` }}
                       />

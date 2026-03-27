@@ -433,7 +433,7 @@ export default function RegulatorDashboard() {
           <div className="flex items-center gap-2">
             {blockchainConfigured ? (
               wallet.isConnected ? (
-                <Badge className="bg-green-500 flex items-center gap-1">
+                <Badge className="bg-success text-success-foreground flex items-center gap-1">
                   <Link2 className="h-3 w-3" />
                   Blockchain Connected
                 </Badge>
@@ -473,7 +473,7 @@ export default function RegulatorDashboard() {
 
         {/* Regulator Setup Instructions */}
         {blockchainConfigured && wallet.isConnected && (
-          <Alert className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+          <Alert className="bg-primary-subtle border-primary/20">
             <ShieldCheck className="h-4 w-4" />
             <AlertTitle>Blockchain Regulator Requirements</AlertTitle>
             <AlertDescription className="space-y-2">

@@ -57,22 +57,20 @@ export default function Home() {
 
       <main className="flex-1 pt-16">
         {/* Hero Section */}
-        <section className="relative w-full min-h-[92vh] flex items-center overflow-hidden">
+        <section className="relative w-full min-h-[92vh] flex items-center overflow-hidden mesh-gradient">
           {/* Background Elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-          <div className="absolute top-20 left-[5%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute bottom-20 right-[5%] w-[600px] h-[600px] bg-accent/15 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[200px]" />
+          <div className="absolute top-20 left-[5%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse opacity-60" />
+          <div className="absolute bottom-20 right-[5%] w-[600px] h-[600px] bg-accent/15 rounded-full blur-[150px] animate-pulse opacity-60" style={{ animationDelay: '1s' }} />
           
-          {/* Grid Pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--primary)/0.03)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--primary)/0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+          {/* Grid Pattern - More subtle in light mode */}
+          <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--primary)/0.02)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--primary)/0.02)_1px,transparent_1px)] bg-[size:60px_60px]" />
           
           {/* Floating Elements */}
           <div className="absolute top-32 right-[15%] hidden lg:block">
             <motion.div 
               animate={{ y: [0, -15, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="p-4 glass-card"
+              className="p-4 glass-premium rounded-2xl"
             >
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
@@ -90,7 +88,7 @@ export default function Home() {
             <motion.div 
               animate={{ y: [0, 15, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="p-4 glass-card"
+              className="p-4 glass-premium rounded-2xl"
             >
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
@@ -108,7 +106,7 @@ export default function Home() {
             <motion.div 
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="p-4 glass-card"
+              className="p-4 glass-premium rounded-2xl"
             >
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
@@ -131,7 +129,7 @@ export default function Home() {
             >
               {/* Badge */}
               <motion.div variants={fadeInUp}>
-                <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2 text-sm font-medium text-primary ring-1 ring-primary/20 shadow-lg shadow-primary/5">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/60 backdrop-blur-md px-5 py-2 text-sm font-semibold text-primary ring-1 ring-primary/20 shadow-xl shadow-primary/10">
                   <Sparkles className="h-4 w-4" />
                   Blockchain-Powered Healthcare Security
                 </span>
@@ -169,7 +167,7 @@ export default function Home() {
                     <ArrowRight className="h-5 w-5" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="h-14 px-10 text-lg border-2 hover:bg-muted/50 hover:scale-105 transition-all duration-300 rounded-xl">
+                <Button asChild variant="outline" size="lg" className="h-14 px-10 text-lg border-2 border-primary/20 bg-white/50 backdrop-blur-sm hover:bg-white/80 hover:scale-105 transition-all duration-300 rounded-2xl">
                   <Link href="/about" className="flex items-center gap-2">
                     <Play className="h-5 w-5" />
                     Learn More
