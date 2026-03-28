@@ -85,7 +85,7 @@ export default function LoginPage() {
                 </svg>
               </div>
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">MedAssure</h1>
+                <h1 className="text-3xl font-bold tracking-tight">MediTrustChain</h1>
                 <p className="text-white/70 text-sm">Trusted Supply Chain</p>
               </div>
             </Link>
@@ -245,7 +245,7 @@ export default function LoginPage() {
                     <div className="w-full border-t border-border/50" />
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-3 text-muted-foreground">New to MedAssure?</span>
+                    <span className="bg-card px-3 text-muted-foreground">New to MediTrustChain?</span>
                   </div>
                 </div>
 

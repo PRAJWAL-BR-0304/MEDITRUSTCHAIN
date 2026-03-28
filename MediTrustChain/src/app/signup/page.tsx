@@ -64,7 +64,7 @@ export default function SignupPage() {
                 <ShieldCheck className="h-10 w-10" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">MedAssure</h1>
+                <h1 className="text-3xl font-bold tracking-tight">MediTrustChain</h1>
                 <p className="text-white/70 text-sm">Join the Future of Healthcare</p>
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function SignupPage() {
             <div className="p-2 bg-primary/10 rounded-lg">
               <ShieldCheck className="h-8 w-8 text-primary" />
             </div>
-            <span className="text-2xl font-bold tracking-tight">MedAssure</span>
+            <span className="text-2xl font-bold tracking-tight">MediTrustChain</span>
           </div>
 
           <Card className="border-0 shadow-2xl shadow-primary/5 bg-card/80 backdrop-blur-sm">

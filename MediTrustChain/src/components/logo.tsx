@@ -1,4 +1,3 @@
-
 import { cn } from "@/lib/utils";
 
 interface LogoProps {
@@ -17,53 +16,56 @@ export function Logo({ className, iconOnly = false, size = 'md' }: LogoProps) {
   const { icon, text, gap } = sizeClasses[size];
 
   return (
-    <div className={cn("flex items-center", gap, className)}>
-      {/* Modern Logo Icon */}
+    <div className={cn("flex items-center group cursor-pointer", gap, className)}>
+      {/* Modern Web3 Logo Icon */}
       <div className={cn(
-        "relative flex items-center justify-center rounded-xl",
-        "bg-gradient-to-br from-primary via-primary to-accent",
-        "shadow-lg shadow-primary/25",
+        "relative flex items-center justify-center rounded-lg border border-primary/30",
+        "bg-background/80",
+        "shadow-[0_0_15px_hsla(var(--primary)/0.3)] group-hover:shadow-[0_0_20px_hsla(var(--accent)/0.5)] transition-all duration-500",
         icon
       )}>
-        {/* Shield with Plus Symbol */}
+        {/* Abstract Blockchain/Trust Node Symbol */}
         <svg
           viewBox="0 0 24 24"
           fill="none"
-          className="h-[60%] w-[60%] text-white"
+          className="h-[65%] w-[65%] text-primary group-hover:text-accent transition-colors duration-500"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          {/* Shield outline */}
+          {/* Hexagon Base representing blocks */}
           <path
-            d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"
+            d="M12 2L3 7v10l9 5 9-5V7l-9-5z"
             fill="currentColor"
-            fillOpacity="0.2"
+            fillOpacity="0.1"
             stroke="currentColor"
           />
-          {/* Plus/Cross symbol */}
+          {/* Internal Chain/Network links */}
           <path
-            d="M12 8v8M8 12h8"
+            d="M12 2v20M3 7l9 5M21 7l-9 5"
             stroke="currentColor"
-            strokeWidth="2.5"
+            strokeWidth="1.5"
+            opacity="0.8"
           />
+          {/* Center glowing node */}
+          <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.9" />
         </svg>
         
-        {/* Subtle glow effect */}
-        <div className="absolute inset-0 rounded-xl bg-white/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        {/* Subtle glow effect overlay */}
+        <div className="absolute inset-0 rounded-lg bg-accent/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       </div>
       
       {!iconOnly && (
         <div className="flex flex-col">
           <span className={cn(
-            "font-bold tracking-tight leading-none",
-            "bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text",
+            "font-extrabold tracking-tight leading-none text-foreground",
+            "group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-accent transition-all duration-300",
             text
           )}>
-            MedAssure
+            MediTrustChain
           </span>
-          <span className="text-[10px] font-medium text-muted-foreground tracking-wide uppercase">
-            Trusted Supply Chain
+          <span className="text-[9px] font-mono text-primary/80 tracking-[0.15em] uppercase mt-0.5">
+            Decentralized Trust
           </span>
         </div>
       )}
@@ -74,28 +76,27 @@ export function Logo({ className, iconOnly = false, size = 'md' }: LogoProps) {
 // Compact version for mobile/small spaces
 export function LogoCompact({ className }: { className?: string }) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-md shadow-primary/20">
+    <div className={cn("flex items-center gap-2 group cursor-pointer", className)}>
+      <div className="relative flex h-8 w-8 items-center justify-center rounded-md border border-primary/30 bg-background/80 shadow-[0_0_10px_hsla(var(--primary)/0.2)]">
         <svg
           viewBox="0 0 24 24"
           fill="none"
-          className="h-5 w-5 text-white"
+          className="h-5 w-5 text-primary group-hover:text-accent transition-colors"
           strokeWidth="2"
         >
           <path
-            d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"
+            d="M12 2L3 7v10l9 5 9-5V7l-9-5z"
             fill="currentColor"
-            fillOpacity="0.2"
+            fillOpacity="0.1"
             stroke="currentColor"
           />
-          <path
-            d="M12 8v8M8 12h8"
-            stroke="currentColor"
-            strokeWidth="2.5"
-          />
+          <path d="M12 2v20M3 7l9 5M21 7l-9 5" stroke="currentColor" strokeWidth="1.5" opacity="0.8" />
+          <circle cx="12" cy="12" r="3" fill="currentColor" />
         </svg>
       </div>
-      <span className="text-lg font-bold tracking-tight">MedAssure</span>
+      <span className="text-lg font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
+        MediTrustChain
+      </span>
     </div>
   );
 }

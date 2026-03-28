@@ -28,7 +28,8 @@ import {
   MapPin,
   Truck,
   Pill,
-  Microscope
+  Microscope,
+  Upload
 } from "lucide-react";
 import { MotionDiv } from "@/components/motion-div";
 import { Html5Qrcode } from "html5-qrcode";
@@ -118,6 +119,35 @@ export default function PatientVerifyPage() {
     await handleVerify(decodedText);
   };
 
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Stop camera if running, just in case
+    if (isScannerRunning) {
+      await stopScanner();
+    }
+
+    setIsVerifying(true);
+    try {
+      const scanner = new Html5Qrcode("qr-reader");
+      const decodedText = await scanner.scanFile(file, true);
+      scanner.clear();
+      
+      await handleVerify(decodedText);
+    } catch (err) {
+      console.error("Error scanning uploaded image:", err);
+      setResult({
+        isAuthentic: false,
+        status: 'NOT_FOUND',
+        message: 'Could not detect a QR code in the uploaded image. Please ensure the image is clear or enter the code manually.',
+        details: {},
+        logs: [],
+      });
+      setIsVerifying(false);
+    }
+  };
+
   const handleVerify = async (qrData?: string) => {
     const dataToVerify = qrData || batchCode.trim();
 
@@ -202,7 +232,7 @@ export default function PatientVerifyPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <span className="text-xl font-bold">MedAssure</span>
+            <span className="text-xl font-bold">MediTrustChain</span>
           </Link>
           <Button asChild variant="outline">
             <Link href="/login">Stakeholder Login</Link>
@@ -256,14 +286,30 @@ export default function PatientVerifyPage() {
               <div id="qr-reader" className={`w-full rounded-lg overflow-hidden border-2 ${isScanning ? 'border-primary' : 'border-transparent hidden'}`} />
 
               {!isScanning ? (
-                <Button
-                  onClick={startScanner}
-                  className="w-full h-14 text-lg"
-                  disabled={isVerifying}
-                >
-                  <QrCode className="mr-2 h-5 w-5" />
-                  Start QR Scanner
-                </Button>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Button
+                    onClick={startScanner}
+                    className="w-full h-14 text-sm sm:text-base"
+                    disabled={isVerifying}
+                  >
+                    <QrCode className="mr-2 h-5 w-5" />
+                    Start Camera
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full h-14 text-sm sm:text-base relative overflow-hidden"
+                    disabled={isVerifying}
+                  >
+                    <Upload className="mr-2 h-5 w-5" />
+                    Upload Image
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={handleImageUpload}
+                    />
+                  </Button>
+                </div>
               ) : (
                 <Button
                   onClick={stopScanner}

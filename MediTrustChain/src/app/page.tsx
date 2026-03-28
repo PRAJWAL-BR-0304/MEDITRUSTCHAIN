@@ -454,7 +454,7 @@ export default function Home() {
           </div>
           <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2026 MedAssure. All rights reserved.
+              © 2026 MediTrustChain. All rights reserved.
             </p>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Shield className="h-4 w-4 text-primary" />

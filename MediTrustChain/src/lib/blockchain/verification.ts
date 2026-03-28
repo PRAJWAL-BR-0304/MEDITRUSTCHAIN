@@ -140,24 +140,37 @@ export function parseQRCodeData(qrCodeData: string): {
   mfgDate?: string | number;
   expDate?: string | number;
   quantity?: number;
-  // V2: The on-chain hash stored in QR code - SINGLE SOURCE OF TRUTH
   dataHash?: string;
 } | null {
   try {
     const data = JSON.parse(qrCodeData);
+    
+    // If somehow parsed as simple string
+    if (typeof data === 'string') {
+      return {
+        batchId: data,
+        batchCode: data
+      };
+    }
+    
     return {
-      // Support both old format (batchId) and new format (batchCode)
       batchId: data.batchCode || data.batchId,
       batchCode: data.batchCode || data.batchId,
       drugName: data.drugName,
       manufacturer: data.manufacturer,
-      mfgDate: data.mfgDate, // Can be string or number (timestamp)
-      expDate: data.expDate,  // Can be string or number (timestamp)
+      mfgDate: data.mfgDate,
+      expDate: data.expDate,
       quantity: data.quantity,
-      // V2: Extract the on-chain hash from QR code
       dataHash: data.dataHash,
     };
   } catch (error) {
+    // If NOT JSON, assume it was manually entered as plain text
+    if (typeof qrCodeData === 'string' && qrCodeData.trim() !== '') {
+      return {
+        batchId: qrCodeData.trim(),
+        batchCode: qrCodeData.trim()
+      };
+    }
     console.error('Failed to parse QR code data:', error);
     return null;
   }

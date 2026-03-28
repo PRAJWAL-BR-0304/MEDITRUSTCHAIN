@@ -80,7 +80,7 @@ export function AboutAssistant() {
           AI-Powered Help
         </CardTitle>
         <CardDescription className="text-sm md:text-base">
-          Have questions about MedAssure? Ask our AI assistant.
+          Have questions about MediTrustChain? Ask our AI assistant.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

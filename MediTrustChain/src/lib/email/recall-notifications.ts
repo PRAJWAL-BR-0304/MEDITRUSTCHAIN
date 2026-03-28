@@ -107,7 +107,7 @@ export async function sendRecallNotificationEmail(
               </div>
 
               <h3>How to Respond</h3>
-              <p>Please log in to the MedAssure platform to:</p>
+              <p>Please log in to the MediTrustChain platform to:</p>
               <ul>
                 <li>Acknowledge receipt of this notification</li>
                 <li>Report units on hand</li>
@@ -140,11 +140,11 @@ export async function sendRecallNotificationEmail(
                 Immediate action is required to ensure patient safety and regulatory compliance.
               </p>
               <p>
-                This email was sent by MedAssure Pharmaceutical Supply Chain Management System.<br>
+                This email was sent by MediTrustChain Pharmaceutical Supply Chain Management System.<br>
                 Do not reply directly to this email. Use the platform to submit your response.
               </p>
               <p>
-                © ${new Date().getFullYear()} MedAssure. All rights reserved.
+                © ${new Date().getFullYear()} MediTrustChain. All rights reserved.
               </p>
             </div>
           </div>
@@ -180,17 +180,17 @@ IMMEDIATE ACTIONS REQUIRED:
 5. Respond within 24 hours
 6. Contact downstream customers
 
-Please log in to MedAssure to respond: ${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/dashboard/recalls
+Please log in to MediTrustChain to respond: ${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002'}/dashboard/recalls
 
 For assistance: ${process.env.SMTP_FROM_EMAIL}
 
 ---
 This is an official recall notification. Immediate action required.
-© ${new Date().getFullYear()} MedAssure
+© ${new Date().getFullYear()} MediTrustChain
     `;
 
     await transporter.sendMail({
-      from: `"${process.env.SMTP_FROM_NAME || 'MedAssure Recalls'}" <${process.env.SMTP_FROM_EMAIL}>`,
+      from: `"${process.env.SMTP_FROM_NAME || 'MediTrustChain Recalls'}" <${process.env.SMTP_FROM_EMAIL}>`,
       to: recipient.email,
       subject: subject,
       text: textBody,
@@ -263,16 +263,16 @@ export async function sendRecallAcknowledgmentEmail(
               <li><strong>Acknowledged:</strong> ${new Date(notification.acknowledgedAt!).toLocaleString()}</li>
             </ul>
             <p>
-              Please complete the required actions and submit your response through the MedAssure platform.
+              Please complete the required actions and submit your response through the MediTrustChain platform.
             </p>
-            <p>Best regards,<br>MedAssure Team</p>
+            <p>Best regards,<br>MediTrustChain Team</p>
           </div>
         </body>
       </html>
     `;
 
     await transporter.sendMail({
-      from: `"${process.env.SMTP_FROM_NAME || 'MedAssure'}" <${process.env.SMTP_FROM_EMAIL}>`,
+      from: `"${process.env.SMTP_FROM_NAME || 'MediTrustChain'}" <${process.env.SMTP_FROM_EMAIL}>`,
       to: notification.recipientEmail,
       subject: subject,
       html: htmlBody,
@@ -322,7 +322,7 @@ export async function sendRecallCompletionEmail(
                 and this recall has been officially terminated.
               </p>
               
-              <p>Best regards,<br>MedAssure Recall Management Team</p>
+              <p>Best regards,<br>MediTrustChain Recall Management Team</p>
             </div>
           </div>
         </body>
@@ -331,7 +331,7 @@ export async function sendRecallCompletionEmail(
 
     for (const recipient of recipients) {
       await transporter.sendMail({
-        from: `"${process.env.SMTP_FROM_NAME || 'MedAssure'}" <${process.env.SMTP_FROM_EMAIL}>`,
+        from: `"${process.env.SMTP_FROM_NAME || 'MediTrustChain'}" <${process.env.SMTP_FROM_EMAIL}>`,
         to: recipient.email,
         subject: subject,
         html: htmlBody,

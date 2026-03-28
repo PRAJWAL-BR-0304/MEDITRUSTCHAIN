@@ -43,7 +43,7 @@ export default function DashboardLayout({
             </div>
           </div>
           <div className="text-center">
-            <p className="text-lg font-semibold text-foreground">MedAssure</p>
+            <p className="text-lg font-semibold text-foreground">MediTrustChain</p>
             <p className="text-sm text-muted-foreground">Loading dashboard...</p>
           </div>
         </div>

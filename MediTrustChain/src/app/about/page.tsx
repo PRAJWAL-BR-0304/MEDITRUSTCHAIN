@@ -73,7 +73,7 @@ export default function AboutPage() {
             <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/20 shrink-0">
               <ShieldCheck className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <span className="text-base sm:text-xl font-bold tracking-tight">MedAssure</span>
+            <span className="text-base sm:text-xl font-bold tracking-tight">MediTrustChain</span>
           </Link>
           <nav className="flex items-center gap-2 sm:gap-4">
             <ThemeToggleClientWrapper />
@@ -118,7 +118,7 @@ export default function AboutPage() {
                 </span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                MedAssure leverages blockchain technology to bring transparency, security, and trust to the pharmaceutical supply chain. Combat counterfeit drugs and ensure patient safety.
+                MediTrustChain leverages blockchain technology to bring transparency, security, and trust to the pharmaceutical supply chain. Combat counterfeit drugs and ensure patient safety.
               </p>
             </motion.div>
           </div>
@@ -235,7 +235,7 @@ export default function AboutPage() {
                   <span className="text-primary">Ask Our AI Assistant</span>
                 </h2>
                 <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                  Our intelligent assistant can help answer your questions about MedAssure, the pharmaceutical supply chain, and how blockchain technology ensures drug safety.
+                  Our intelligent assistant can help answer your questions about MediTrustChain, the pharmaceutical supply chain, and how blockchain technology ensures drug safety.
                 </p>
                 <ul className="space-y-3">
                   {[
@@ -309,10 +309,10 @@ export default function AboutPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent text-white shrink-0">
               <ShieldCheck className="h-4 w-4" />
             </div>
-            <span className="font-bold">MedAssure</span>
+            <span className="font-bold">MediTrustChain</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            © 2026 MedAssure. All rights reserved.
+            © 2026 MediTrustChain. All rights reserved.
           </p>
         </div>
       </footer>

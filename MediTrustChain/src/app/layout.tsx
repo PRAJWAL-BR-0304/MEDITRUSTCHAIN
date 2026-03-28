@@ -18,12 +18,12 @@ import { BlockchainProvider } from '@/lib/blockchain';
 import '@/lib/clear-data'; // Import to expose clear functions to window
 
 export const metadata: Metadata = {
-  title: 'MedAssure | Trusted Pharmaceutical Supply Chain',
-  description: 'MedAssure - Blockchain-powered pharmaceutical supply chain security. Ensure drug authenticity, prevent counterfeits, and protect patients with immutable verification.',
-  keywords: ['pharmaceutical', 'supply chain', 'blockchain', 'drug authenticity', 'healthcare', 'medical', 'verification'],
-  authors: [{ name: 'MedAssure' }],
+  title: 'MediTrustChain | Trusted Pharmaceutical Supply Chain',
+  description: 'MediTrustChain - Blockchain-powered pharmaceutical supply chain security. Ensure drug authenticity, prevent counterfeits, and protect patients with immutable verification.',
+  keywords: ['pharmaceutical', 'supply chain', 'blockchain', 'traceability', 'MediTrustChain', 'healthcare'],
+  authors: [{ name: 'MediTrustChain' }],
   openGraph: {
-    title: 'MedAssure | Trusted Pharmaceutical Supply Chain',
+    title: 'MediTrustChain | Trusted Pharmaceutical Supply Chain',
     description: 'Blockchain-powered pharmaceutical supply chain security for drug authenticity and patient safety.',
     type: 'website',
   },

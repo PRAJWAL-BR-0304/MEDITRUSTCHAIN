@@ -32,7 +32,7 @@ export function AIChatbot() {
     setIsMounted(true);
     setMessages([{
       role: "assistant",
-      content: "Hi! I'm your MedAssure AI assistant powered by LLaMA 3.3 70B. I can help you with drug information, batch tracking, supply chain queries, and compliance questions. How can I help you today?",
+      content: "Hi! I'm your MediTrustChain AI assistant powered by LLaMA 3.3 70B. I can help you with drug information, batch tracking, supply chain queries, and compliance questions. How can I help you today?",
       timestamp: new Date(),
     }]);
   }, []);

@@ -188,7 +188,7 @@ export default function TamperingDemoPage() {
           Tampering Detection Demo
         </h1>
         <p className="text-muted-foreground mt-2">
-          Experience how MedAssure detects counterfeit drugs and supply chain tampering using blockchain verification
+          Experience how MediTrustChain detects counterfeit drugs and supply chain tampering using blockchain verification
         </p>
       </div>
 
