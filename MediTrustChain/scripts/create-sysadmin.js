@@ -19,7 +19,7 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 async function main() {
-  const email = 'jaanujalaja5409@gmail.com';
+  const email = 'prajwalbr0304@gmail.com';
   const password = 'anekal123';
   
   // Create user
