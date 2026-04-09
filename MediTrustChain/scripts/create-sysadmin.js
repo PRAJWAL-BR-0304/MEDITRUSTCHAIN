@@ -19,8 +19,8 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
 });
 
 async function main() {
-  const email = 'prajwalbr0304@gmail.com';
-  const password = 'anekal123';
+  const email = 'admin@gmail.com';
+  const password = 'password'; // Use a strong password in production!
   
   // Create user
   console.log(`Creating user ${email}...`);
