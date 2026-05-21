@@ -2,6 +2,8 @@
 
 <img src="public/uploads/logo.png" alt="MediTrustChain Logo" width="120" height="120" onerror="this.style.display='none'"/>
 
+<img src="https://img.shields.io/badge/MediTrustChain-Pharma%20supply%20chain-AEE6B2?style=for-the-badge&labelColor=C8B6FF" alt="MediTrustChain badge" />
+
 # 🏥 MediTrustChain
 
 ### *Blockchain-Powered Pharmaceutical Supply Chain*
@@ -24,6 +26,7 @@
 ## 📌 Table of Contents
 
 - [✨ Features](#-features)
+- [📸 Product gallery](#-product-gallery)
 - [🏗️ System Architecture](#️-system-architecture)
 - [🔄 Supply Chain Flow](#-supply-chain-flow)
 - [🛠️ Tech Stack](#️-tech-stack)
@@ -103,40 +106,240 @@
 
 ---
 
+## 📸 Product gallery
+
+<p align="center">
+  <sub>High-resolution UI captures, on-chain proofs, AI dashboards, and architecture diagrams — all assets live under <code>docs/screenshots/SCREENSHOTS/</code>.</sub>
+</p>
+
+### 🌐 Landing & authentication
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Landing — homepage</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/01-Landing-Page-Homepage.png" alt="Landing homepage" width="100%"/></td>
+<td width="50%" align="center"><b>Stakeholder login</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/02-Stakeholder-Login-Page.png" alt="Stakeholder login" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Admin authentication</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/03-Admin-Login-Authentication.png" alt="Admin login" width="100%"/></td>
+<td align="center"></td>
+</tr>
+</table>
+
+### 👑 Admin & governance
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Admin dashboard</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/04-Admin-Dashboard-Overview.png" alt="Admin dashboard" width="100%"/></td>
+<td width="50%" align="center"><b>Admin analytics</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/05-Admin-Analytics-Dashboard.png" alt="Admin analytics" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>CBAC permission assignment</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/06-CBAC-Permission-Assignment.png" alt="CBAC permissions" width="100%"/></td>
+<td align="center"><b>System audit logs</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/07-System-Audit-Logs.png" alt="Audit logs" width="100%"/></td>
+</tr>
+</table>
+
+### 🏛️ Regulator & supply roles
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Drug template approval</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/08-Regulator-Drug-Template-Approval.png" alt="Regulator drug templates" width="100%"/></td>
+<td width="50%" align="center"><b>Regulator audit report</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/09-Regulator-Audit-Report.png" alt="Regulator audit" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Distributor dashboard</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/10-Distributor-Dashboard.png" alt="Distributor" width="100%"/></td>
+<td align="center"><b>Pharmacy dashboard</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/11-Pharmacy-Dashboard.png" alt="Pharmacy" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Manufacturer QR generation</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/12-Manufacturer-QR-Code-Generation.png" alt="QR generation" width="100%"/></td>
+<td align="center"><b>Batch details & live tracking</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/13-Batch-Details-Live-Tracking.png" alt="Batch tracking" width="100%"/></td>
+</tr>
+</table>
+
+### 💊 Patient verification
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Patient verification portal</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/14-Patient-Verification-Portal.png" alt="Patient portal" width="100%"/></td>
+<td width="50%" align="center"><b>Technical verification details</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/15-Patient-Verification-Technical-Details.png" alt="Patient technical" width="100%"/></td>
+</tr>
+</table>
+
+### ⛓️ Blockchain & wallet
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Etherscan transaction</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/16-Etherscan-Blockchain-Transaction.png" alt="Etherscan tx" width="100%"/></td>
+<td width="50%" align="center"><b>Public verification proof</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/17-Etherscan-Public-Verification-Proof.png" alt="Etherscan proof" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Demo transaction flow</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/18-Demo-Transaction-Flow.png" alt="Demo tx flow" width="100%"/></td>
+<td align="center"><b>MetaMask integration</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/19-MetaMask-Wallet-Integration.png" alt="MetaMask" width="100%"/></td>
+</tr>
+</table>
+
+### 🤖 AI & assistance
+
+<table>
+<tr>
+<td width="50%" align="center"><b>AI anomaly dashboard</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/20-AI-Anomaly-Detection-Dashboard.png" alt="AI anomaly dashboard" width="100%"/></td>
+<td width="50%" align="center"><b>Anomaly detection pipeline</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/21-AI-Anomaly-Detection-Pipeline.png" alt="AI pipeline" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>AI chatbot assistant</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/22-AI-Chatbot-Assistant.png" alt="AI chatbot" width="100%"/></td>
+<td align="center"><b>AI-powered help</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/23-AI-Powered-Help-System.png" alt="AI help" width="100%"/></td>
+</tr>
+</table>
+
+### 📐 Diagrams & deep architecture (static)
+
+<table>
+<tr>
+<td width="50%" align="center"><b>End-to-end working flow</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/24-System-Working-Flow-Diagram.png" alt="System flow" width="100%"/></td>
+<td width="50%" align="center"><b>Architecture illustration</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/25-System-Architecture-Illustration.png" alt="Architecture illustration" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Technology stack overview</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/26-Technology-Stack-Overview.png" alt="Tech stack" width="100%"/></td>
+<td align="center"><b>Hash verification algorithm</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/27-Hash-Verification-Algorithm.png" alt="Hash verification" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Security architecture layers</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/28-Security-Architecture-Layers.png" alt="Security layers" width="100%"/></td>
+<td align="center"></td>
+</tr>
+</table>
+
+### 📊 Performance & benchmarks
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Supply chain performance metrics</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/29-Supply-Chain-Performance-Metrics.png" alt="SC metrics" width="100%"/></td>
+<td width="50%" align="center"><b>Comparative radar</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/30-Comparative-Performance-Radar.png" alt="Radar chart" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>Performance benchmarks</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/31-Performance-Benchmarks.png" alt="Benchmarks" width="100%"/></td>
+<td align="center"><b>Anomaly detection performance</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/32-Anomaly-Detection-Performance.png" alt="Anomaly perf" width="100%"/></td>
+</tr>
+<tr>
+<td align="center"><b>System throughput analysis</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/33-System-Throughput-Analysis.png" alt="Throughput" width="100%"/></td>
+<td align="center"><b>Future enhancement roadmap</b><br/><br/><img src="docs/screenshots/SCREENSHOTS/34-Future-Enhancement-Roadmap.png" alt="Roadmap" width="100%"/></td>
+</tr>
+</table>
+
+---
+
 ## 🏗️ System Architecture
 
+MediTrustChain is a **multi-tier, multi-client** system: browsers and mobile apps hit **Next.js** (App Router + Edge middleware), which orchestrates **Supabase** (Postgres + Auth + RLS), **Genkit/Groq** AI flows, **Ethers.js** against **Sepolia**, **Pinata/IPFS**, **MapTiler/MapLibre**, and **SMTP** notifications. The diagram below models **data planes**, **trust boundaries**, and **typical batch lifecycle** interactions in one view.
+
+```mermaid
+flowchart TB
+  subgraph presentation["🖥️ Presentation tier"]
+    direction TB
+    subgraph web["Next.js 15 — App Router"]
+      P1["Role dashboards<br/>Mfr · Reg · Dist · Log · Pharm · Admin"]
+      P2["Patient verify UI"]
+      P3["API routes · Server Actions"]
+    end
+    subgraph mobile["Mobile"]
+      M1["Flutter patient app<br/>QR · history · dark mode"]
+    end
+  end
+
+  subgraph edge["⚡ Edge & gateway"]
+    MW["middleware.ts<br/>JWT parse · CBAC · route guards"]
+    CF["Cookie / session bridge"]
+  end
+
+  subgraph app["🧠 Application & integration tier"]
+    direction LR
+    SVC["Business services<br/>batches · shipments · recalls"]
+    AI["Genkit flows<br/>anomaly · chatbot · TTS · drug-info"]
+    BC["Blockchain service<br/>Ethers.js v6 · MetaMask EIP-1193"]
+    IPFS["IPFS client<br/>Pinata upload · CID → on-chain"]
+    MAP["Maps service<br/>MapLibre · MapTiler tiles"]
+    MAIL["Nodemailer<br/>Gmail SMTP alerts"]
+  end
+
+  subgraph data["🗄️ Data & identity plane"]
+    SB[(Supabase Postgres)]
+    AUTH[(Supabase Auth)]
+    RLS["Row-Level Security policies"]
+    STOR["Storage buckets"]
+  end
+
+  subgraph chain["⛓️ Trust & settlement plane"]
+    SC["MediTrustChainV2.sol"]
+    SEP[(Ethereum Sepolia)]
+    SCAN["Etherscan / public proof"]
+  end
+
+  subgraph external["☁️ External providers"]
+    GROQ[(Groq Llama-3.3-70B)]
+    PIN[(Pinata IPFS API)]
+    MT[(MapTiler API)]
+  end
+
+  presentation --> edge
+  edge --> MW
+  MW --> web
+  MW --> mobile
+
+  web --> SVC
+  web --> AI
+  web --> BC
+  web --> IPFS
+  web --> MAP
+  web --> MAIL
+
+  mobile -->|HTTPS JSON| P3
+
+  SVC --> SB
+  SVC --> AUTH
+  SB --- RLS
+  SVC --> STOR
+
+  AI --> GROQ
+  AI --> SB
+
+  BC --> SEP
+  BC --> SC
+  SC --> SEP
+  BC --> SCAN
+
+  IPFS --> PIN
+  MAP --> MT
+
+  MAIL --> SMTP_RELAY[(Gmail / SMTP relay)]
+
+  subgraph lifecycle["🔄 Simplified batch trust path"]
+    direction LR
+    L1["Create / register batch"] --> L2["Regulator decision"]
+    L2 --> L3["Logistics GPS updates"]
+    L3 --> L4["Pharmacy verify + sale"]
+    L4 --> L5["Patient authenticity check"]
+  end
+
+  SVC -.-> lifecycle
+  BC -.-> lifecycle
+  AI -.-> lifecycle
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        CLIENT LAYER                                 │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌──────────────────┐   │
-│  │  Next.js 15 App │  │  Flutter App    │  │  Patient Mobile  │   │
-│  │  (Web - 6 roles)│  │  (Android/iOS)  │  │  (QR Verify)     │   │
-│  └────────┬────────┘  └────────┬────────┘  └────────┬─────────┘   │
-└───────────┼────────────────────┼────────────────────┼─────────────┘
-            │                    │                    │
-┌───────────▼────────────────────▼────────────────────▼─────────────┐
-│                       MIDDLEWARE LAYER                              │
-│  ┌──────────────────────────────────────────────────────────────┐  │
-│  │  Next.js Edge Runtime — CBAC Middleware (JWT + Role Guards)  │  │
-│  └──────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────┘
-            │
-┌───────────▼────────────────────────────────────────────────────────┐
-│                      APPLICATION LAYER                              │
-│  ┌────────────┐  ┌──────────────┐  ┌──────────────┐  ┌─────────┐ │
-│  │  Supabase  │  │  Blockchain  │  │  Genkit AI   │  │  IPFS   │ │
-│  │  (PostGres)│  │  (Ethers.js) │  │  (Groq LLM)  │  │(Pinata) │ │
-│  └────────────┘  └──────────────┘  └──────────────┘  └─────────┘ │
-└────────────────────────────────────────────────────────────────────┘
-            │
-┌───────────▼────────────────────────────────────────────────────────┐
-│                      BLOCKCHAIN LAYER                               │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │  MediTrustChainV2.sol — Ethereum Sepolia Testnet            │   │
-│  │  Contract: 0x1E60556dE1625bD468eCe9e45a421aFa4bb1F73D      │   │
-│  └─────────────────────────────────────────────────────────────┘   │
-└────────────────────────────────────────────────────────────────────┘
-```
+
+<details>
+<summary><b>📎 Layer cheat-sheet</b> (click to expand)</summary>
+
+| Plane | Responsibility | Key tech |
+|:-----:|----------------|----------|
+| **Presentation** | Role UX, patient flows, static assets | Next.js 15, Flutter, Tailwind, Radix |
+| **Edge** | Zero-trust entry: token, role claims, redirect | Edge Runtime `middleware.ts` |
+| **Application** | Orchestration, side-effects, AI & chain I/O | Route handlers, Genkit, Ethers.js |
+| **Data** | Authoritative off-chain state + audit | Supabase + RLS |
+| **Chain** | Tamper-evident anchors, verification | Solidity, Sepolia, MetaMask |
+| **External** | LLM, maps, IPFS pinning | Groq, MapTiler, Pinata |
+
+</details>
+
+<p align="center">
+  <sub>Static architecture slides from the gallery: <code>24–28</code> · On-chain evidence: <code>16–19</code> · AI surface: <code>20–23</code></sub>
+</p>
 
 ---
 
@@ -216,8 +419,8 @@ Terminal states: `REJECTED | EXPIRED | RECALLED`
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/eng22cs0121/FINAL-YEAR-PROJECT.git
-cd FINAL-YEAR-PROJECT
+git clone https://github.com/PRAJWAL-BR-0304/MediTrustChain.git
+cd MediTrustChain
 
 # 2. Install dependencies
 npm install
@@ -328,7 +531,7 @@ flutter build apk     # Release APK
 ## 📁 Project Structure
 
 ```
-FINAL-YEAR-PROJECT/
+MediTrustChain/
 ├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── dashboard/          # Role-based dashboards (6 roles)

@@ -51,6 +51,9 @@ next-env.d.ts
 MediTrustChain_Project_Report.html
 /app.json
 
+# OS junk inside bundled screenshot folders
+docs/screenshots/**/desktop.ini
+
 # firebase
 firebase-debug.log
 firestore-debug.log
