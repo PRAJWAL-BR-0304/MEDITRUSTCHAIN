@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/public/uploads/logo.png" alt="MediTrustChain Logo" width="120" height="120" onerror="this.style.display='none'"/>
+<img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/logo.png" alt="MediTrustChain Logo" width="120" height="120" onerror="this.style.display='none'"/>
 
 <img src="https://img.shields.io/badge/MediTrustChain-Pharma%20supply%20chain-AEE6B2?style=for-the-badge&labelColor=C8B6FF" alt="MediTrustChain badge" />
 
@@ -109,20 +109,20 @@
 ## 📸 Product gallery
 
 <p align="center">
-  <sub>High-resolution UI captures, on-chain proofs, AI dashboards, and architecture diagrams — all assets live under <code>https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/</code>.</sub>
+  <sub>High-resolution UI captures, on-chain proofs, AI dashboards, and architecture diagrams — all assets live under <code>https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/</code>.</sub>
 </p>
 
-> **Why absolute URLs:** GitHub’s README renderer resolves **relative** paths from the repo file tree; that can break when viewing the README outside `github.com` (for example **GitHub Pages** or cached previews). **KNOWLEDGE-BASE** avoids that by linking to **release assets** (`…/releases/download/…`). Here we use the same idea—**fully qualified** `raw.githubusercontent.com` URLs on the default branch (`master`) so images load the same way as in KNOWLEDGE-BASE. Optional upgrade: attach PNGs to a **Release** (like `readme-screenshots`) for CDN-style URLs that never depend on branch name.
+> **Why release URLs:** Plain `raw.githubusercontent.com` links can return **404** for some clients (and briefly right after pushes) even when the file exists. Hosting screenshots as **release assets**—the same approach as [KNOWLEDGE-BASE](https://github.com/PRAJWAL-BR-0304/KNOWLEDGE-BASE)—uses `github.com/.../releases/download/...` URLs that GitHub’s README image proxy resolves reliably.
 
 ### 🌐 Landing & authentication
 
 <table>
 <tr>
-<td width="50%" align="center"><b>Landing — homepage</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/01-Landing-Page-Homepage.png" alt="Landing homepage" width="100%"/></td>
-<td width="50%" align="center"><b>Stakeholder login</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/02-Stakeholder-Login-Page.png" alt="Stakeholder login" width="100%"/></td>
+<td width="50%" align="center"><b>Landing — homepage</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/01-Landing-Page-Homepage.png" alt="Landing homepage" width="100%"/></td>
+<td width="50%" align="center"><b>Stakeholder login</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/02-Stakeholder-Login-Page.png" alt="Stakeholder login" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Admin authentication</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/03-Admin-Login-Authentication.png" alt="Admin login" width="100%"/></td>
+<td align="center"><b>Admin authentication</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/03-Admin-Login-Authentication.png" alt="Admin login" width="100%"/></td>
 <td align="center"></td>
 </tr>
 </table>
@@ -131,12 +131,12 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>Admin dashboard</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/04-Admin-Dashboard-Overview.png" alt="Admin dashboard" width="100%"/></td>
-<td width="50%" align="center"><b>Admin analytics</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/05-Admin-Analytics-Dashboard.png" alt="Admin analytics" width="100%"/></td>
+<td width="50%" align="center"><b>Admin dashboard</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/04-Admin-Dashboard-Overview.png" alt="Admin dashboard" width="100%"/></td>
+<td width="50%" align="center"><b>Admin analytics</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/05-Admin-Analytics-Dashboard.png" alt="Admin analytics" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>CBAC permission assignment</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/06-CBAC-Permission-Assignment.png" alt="CBAC permissions" width="100%"/></td>
-<td align="center"><b>System audit logs</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/07-System-Audit-Logs.png" alt="Audit logs" width="100%"/></td>
+<td align="center"><b>CBAC permission assignment</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/06-CBAC-Permission-Assignment.png" alt="CBAC permissions" width="100%"/></td>
+<td align="center"><b>System audit logs</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/07-System-Audit-Logs.png" alt="Audit logs" width="100%"/></td>
 </tr>
 </table>
 
@@ -144,16 +144,16 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>Drug template approval</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/08-Regulator-Drug-Template-Approval.png" alt="Regulator drug templates" width="100%"/></td>
-<td width="50%" align="center"><b>Regulator audit report</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/09-Regulator-Audit-Report.png" alt="Regulator audit" width="100%"/></td>
+<td width="50%" align="center"><b>Drug template approval</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/08-Regulator-Drug-Template-Approval.png" alt="Regulator drug templates" width="100%"/></td>
+<td width="50%" align="center"><b>Regulator audit report</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/09-Regulator-Audit-Report.png" alt="Regulator audit" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Distributor dashboard</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/10-Distributor-Dashboard.png" alt="Distributor" width="100%"/></td>
-<td align="center"><b>Pharmacy dashboard</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/11-Pharmacy-Dashboard.png" alt="Pharmacy" width="100%"/></td>
+<td align="center"><b>Distributor dashboard</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/10-Distributor-Dashboard.png" alt="Distributor" width="100%"/></td>
+<td align="center"><b>Pharmacy dashboard</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/11-Pharmacy-Dashboard.png" alt="Pharmacy" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Manufacturer QR generation</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/12-Manufacturer-QR-Code-Generation.png" alt="QR generation" width="100%"/></td>
-<td align="center"><b>Batch details & live tracking</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/13-Batch-Details-Live-Tracking.png" alt="Batch tracking" width="100%"/></td>
+<td align="center"><b>Manufacturer QR generation</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/12-Manufacturer-QR-Code-Generation.png" alt="QR generation" width="100%"/></td>
+<td align="center"><b>Batch details & live tracking</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/13-Batch-Details-Live-Tracking.png" alt="Batch tracking" width="100%"/></td>
 </tr>
 </table>
 
@@ -161,8 +161,8 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>Patient verification portal</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/14-Patient-Verification-Portal.png" alt="Patient portal" width="100%"/></td>
-<td width="50%" align="center"><b>Technical verification details</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/15-Patient-Verification-Technical-Details.png" alt="Patient technical" width="100%"/></td>
+<td width="50%" align="center"><b>Patient verification portal</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/14-Patient-Verification-Portal.png" alt="Patient portal" width="100%"/></td>
+<td width="50%" align="center"><b>Technical verification details</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/15-Patient-Verification-Technical-Details.png" alt="Patient technical" width="100%"/></td>
 </tr>
 </table>
 
@@ -170,12 +170,12 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>Etherscan transaction</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/16-Etherscan-Blockchain-Transaction.png" alt="Etherscan tx" width="100%"/></td>
-<td width="50%" align="center"><b>Public verification proof</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/17-Etherscan-Public-Verification-Proof.png" alt="Etherscan proof" width="100%"/></td>
+<td width="50%" align="center"><b>Etherscan transaction</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/16-Etherscan-Blockchain-Transaction.png" alt="Etherscan tx" width="100%"/></td>
+<td width="50%" align="center"><b>Public verification proof</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/17-Etherscan-Public-Verification-Proof.png" alt="Etherscan proof" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Demo transaction flow</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/18-Demo-Transaction-Flow.png" alt="Demo tx flow" width="100%"/></td>
-<td align="center"><b>MetaMask integration</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/19-MetaMask-Wallet-Integration.png" alt="MetaMask" width="100%"/></td>
+<td align="center"><b>Demo transaction flow</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/18-Demo-Transaction-Flow.png" alt="Demo tx flow" width="100%"/></td>
+<td align="center"><b>MetaMask integration</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/19-MetaMask-Wallet-Integration.png" alt="MetaMask" width="100%"/></td>
 </tr>
 </table>
 
@@ -183,12 +183,12 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>AI anomaly dashboard</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/20-AI-Anomaly-Detection-Dashboard.png" alt="AI anomaly dashboard" width="100%"/></td>
-<td width="50%" align="center"><b>Anomaly detection pipeline</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/21-AI-Anomaly-Detection-Pipeline.png" alt="AI pipeline" width="100%"/></td>
+<td width="50%" align="center"><b>AI anomaly dashboard</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/20-AI-Anomaly-Detection-Dashboard.png" alt="AI anomaly dashboard" width="100%"/></td>
+<td width="50%" align="center"><b>Anomaly detection pipeline</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/21-AI-Anomaly-Detection-Pipeline.png" alt="AI pipeline" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>AI chatbot assistant</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/22-AI-Chatbot-Assistant.png" alt="AI chatbot" width="100%"/></td>
-<td align="center"><b>AI-powered help</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/23-AI-Powered-Help-System.png" alt="AI help" width="100%"/></td>
+<td align="center"><b>AI chatbot assistant</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/22-AI-Chatbot-Assistant.png" alt="AI chatbot" width="100%"/></td>
+<td align="center"><b>AI-powered help</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/23-AI-Powered-Help-System.png" alt="AI help" width="100%"/></td>
 </tr>
 </table>
 
@@ -196,15 +196,15 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>End-to-end working flow</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/24-System-Working-Flow-Diagram.png" alt="System flow" width="100%"/></td>
-<td width="50%" align="center"><b>Architecture illustration</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/25-System-Architecture-Illustration.png" alt="Architecture illustration" width="100%"/></td>
+<td width="50%" align="center"><b>End-to-end working flow</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/24-System-Working-Flow-Diagram.png" alt="System flow" width="100%"/></td>
+<td width="50%" align="center"><b>Architecture illustration</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/25-System-Architecture-Illustration.png" alt="Architecture illustration" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Technology stack overview</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/26-Technology-Stack-Overview.png" alt="Tech stack" width="100%"/></td>
-<td align="center"><b>Hash verification algorithm</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/27-Hash-Verification-Algorithm.png" alt="Hash verification" width="100%"/></td>
+<td align="center"><b>Technology stack overview</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/26-Technology-Stack-Overview.png" alt="Tech stack" width="100%"/></td>
+<td align="center"><b>Hash verification algorithm</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/27-Hash-Verification-Algorithm.png" alt="Hash verification" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Security architecture layers</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/28-Security-Architecture-Layers.png" alt="Security layers" width="100%"/></td>
+<td align="center"><b>Security architecture layers</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/28-Security-Architecture-Layers.png" alt="Security layers" width="100%"/></td>
 <td align="center"></td>
 </tr>
 </table>
@@ -213,16 +213,16 @@
 
 <table>
 <tr>
-<td width="50%" align="center"><b>Supply chain performance metrics</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/29-Supply-Chain-Performance-Metrics.png" alt="SC metrics" width="100%"/></td>
-<td width="50%" align="center"><b>Comparative radar</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/30-Comparative-Performance-Radar.png" alt="Radar chart" width="100%"/></td>
+<td width="50%" align="center"><b>Supply chain performance metrics</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/29-Supply-Chain-Performance-Metrics.png" alt="SC metrics" width="100%"/></td>
+<td width="50%" align="center"><b>Comparative radar</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/30-Comparative-Performance-Radar.png" alt="Radar chart" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Performance benchmarks</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/31-Performance-Benchmarks.png" alt="Benchmarks" width="100%"/></td>
-<td align="center"><b>Anomaly detection performance</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/32-Anomaly-Detection-Performance.png" alt="Anomaly perf" width="100%"/></td>
+<td align="center"><b>Performance benchmarks</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/31-Performance-Benchmarks.png" alt="Benchmarks" width="100%"/></td>
+<td align="center"><b>Anomaly detection performance</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/32-Anomaly-Detection-Performance.png" alt="Anomaly perf" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>System throughput analysis</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/33-System-Throughput-Analysis.png" alt="Throughput" width="100%"/></td>
-<td align="center"><b>Future enhancement roadmap</b><br/><br/><img src="https://raw.githubusercontent.com/PRAJWAL-BR-0304/MediTrustChain/master/docs/screenshots/gallery/34-Future-Enhancement-Roadmap.png" alt="Roadmap" width="100%"/></td>
+<td align="center"><b>System throughput analysis</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/33-System-Throughput-Analysis.png" alt="Throughput" width="100%"/></td>
+<td align="center"><b>Future enhancement roadmap</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/34-Future-Enhancement-Roadmap.png" alt="Roadmap" width="100%"/></td>
 </tr>
 </table>
 
