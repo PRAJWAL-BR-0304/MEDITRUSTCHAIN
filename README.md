@@ -1,12 +1,10 @@
 <div align="center">
 
-<img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/logo.png" alt="MediTrustChain Logo" width="120" height="120" onerror="this.style.display='none'"/>
+<img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/logo.png" alt="MediTrustChain logo" width="120" height="120"/>
 
-<img src="https://img.shields.io/badge/MediTrustChain-Pharma%20supply%20chain-AEE6B2?style=for-the-badge&labelColor=C8B6FF" alt="MediTrustChain badge" />
+# MediTrustChain
 
-# 🏥 MediTrustChain
-
-### *Blockchain-Powered Pharmaceutical Supply Chain*
+### Blockchain-powered pharmaceutical supply chain
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-363636?style=for-the-badge&logo=solidity)](https://soliditylang.org/)
@@ -15,29 +13,25 @@
 [![Flutter](https://img.shields.io/badge/Flutter-3.22-02569B?style=for-the-badge&logo=flutter)](https://flutter.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-**A final year B.E. Computer Science project** — a full-stack decentralised pharmaceutical supply chain platform that uses blockchain immutability, AI-powered anomaly detection, and real-time GPS tracking to eradicate counterfeit medicines.
+**Traceable batches, on-chain proofs, and role-based operations** — a full-stack platform that combines Ethereum-backed integrity, AI-assisted anomaly detection, and live shipment maps to strengthen pharmaceutical supply-chain transparency.
 
-[🚀 Live Demo](#-quick-start) · [📱 Mobile App](FLUTTER-APP/) · [📄 Project Report](MediTrustChain_Project_Report.html) · [🔗 Smart Contract](https://sepolia.etherscan.io/address/0x1E60556dE1625bD468eCe9e45a421aFa4bb1F73D)
+[Quick start](#-quick-start) · [Mobile app](FLUTTER-APP/) · [Deployed contract (Sepolia)](https://sepolia.etherscan.io/address/0x1E60556dE1625bD468eCe9e45a421aFa4bb1F73D)
 
 </div>
 
 ---
 
-## 📌 Table of Contents
+## Table of contents
 
-- [✨ Features](#-features)
-- [📸 Product gallery](#-product-gallery)
-- [🏗️ System Architecture](#️-system-architecture)
-- [🔄 Supply Chain Flow](#-supply-chain-flow)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [👥 Roles & Dashboards](#-roles--dashboards)
-- [🚀 Quick Start](#-quick-start)
-- [🌐 Environment Variables](#-environment-variables)
-- [📱 Mobile App](#-mobile-app)
-- [⛓️ Blockchain](#️-blockchain)
-- [🤖 AI Features](#-ai-features)
-- [📁 Project Structure](#-project-structure)
-- [🧪 Testing Guide](#-testing-guide)
+| | |
+|:---|:---|
+| [Features](#-features) | [Product gallery](#-product-gallery) |
+| [System architecture](#️-system-architecture) | [Supply chain flow](#-supply-chain-flow) |
+| [Tech stack](#️-tech-stack) | [Roles & dashboards](#-roles--dashboards) |
+| [Quick start](#-quick-start) | [Environment variables](#-environment-variables) |
+| [Mobile app](#-mobile-app) | [Blockchain](#️-blockchain) |
+| [AI features](#-ai-features) | [Project structure](#-project-structure) |
+| [Testing guide](#-testing-guide) | [Credits](#credits) · [License](#license) |
 
 ---
 
@@ -108,11 +102,7 @@
 
 ## 📸 Product gallery
 
-<p align="center">
-  <sub>High-resolution UI captures, on-chain proofs, AI dashboards, and architecture diagrams — all assets live under <code>https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/</code>.</sub>
-</p>
-
-> **Why release URLs:** Plain `raw.githubusercontent.com` links can return **404** for some clients (and briefly right after pushes) even when the file exists. Hosting screenshots as **release assets**—the same approach as [KNOWLEDGE-BASE](https://github.com/PRAJWAL-BR-0304/KNOWLEDGE-BASE)—uses `github.com/.../releases/download/...` URLs that GitHub’s README image proxy resolves reliably.
+UI flows, on-chain verification, AI dashboards, and architecture figures. Images load from the **[`readme-screenshots`](https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/tag/readme-screenshots)** release (reliable on GitHub README).
 
 ### 🌐 Landing & authentication
 
@@ -122,8 +112,7 @@
 <td width="50%" align="center"><b>Stakeholder login</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/02-Stakeholder-Login-Page.png" alt="Stakeholder login" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Admin authentication</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/03-Admin-Login-Authentication.png" alt="Admin login" width="100%"/></td>
-<td align="center"></td>
+<td colspan="2" align="center"><b>Admin authentication</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/03-Admin-Login-Authentication.png" alt="Admin login" width="85%"/></td>
 </tr>
 </table>
 
@@ -204,8 +193,7 @@
 <td align="center"><b>Hash verification algorithm</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/27-Hash-Verification-Algorithm.png" alt="Hash verification" width="100%"/></td>
 </tr>
 <tr>
-<td align="center"><b>Security architecture layers</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/28-Security-Architecture-Layers.png" alt="Security layers" width="100%"/></td>
-<td align="center"></td>
+<td colspan="2" align="center"><b>Security architecture layers</b><br/><br/><img src="https://github.com/PRAJWAL-BR-0304/MediTrustChain/releases/download/readme-screenshots/28-Security-Architecture-Layers.png" alt="Security layers" width="85%"/></td>
 </tr>
 </table>
 
@@ -339,9 +327,7 @@ flowchart TB
 
 </details>
 
-<p align="center">
-  <sub>Static architecture slides from the gallery: <code>24–28</code> · On-chain evidence: <code>16–19</code> · AI surface: <code>20–23</code></sub>
-</p>
+<p align="center"><sub>Gallery index: diagrams <code>24–28</code> · chain proof <code>16–19</code> · AI <code>20–23</code></sub></p>
 
 ---
 
@@ -585,14 +571,13 @@ MediTrustChain/
 
 ---
 
-## 👨‍💻 Authors
+## Credits
 
-**Prajwal B R** — B.E. Computer Science & Engineering  
-Batch of 2022–2026
+**Prajwal B R**
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 
@@ -600,8 +585,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 <div align="center">
 
-**Built with ❤️ for final year project evaluation**
-
-⭐ Star this repo if you find it useful!
+MIT License · Issues and contributions welcome
 
 </div>
